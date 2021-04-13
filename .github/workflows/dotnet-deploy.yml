@@ -1,4 +1,4 @@
-name: .NET Publish
+name: .NET Deploy To GitHub Pages
 
 on:
   push:
@@ -22,7 +22,9 @@ jobs:
       run: dotnet restore
     - name: Build 🔧
       run: dotnet publish  --configuration Release --output build
-    - name: Deploy to Github Pages 🚀
+    - name: Add .nojekyll file 👨‍🦽 # This deactivates the github pages jekyll behavior and thus allows folders with starting underscores to be deployed.
+      run: touch build/wwwroot/.nojekyll
+    - name: Deploy to GitHub Pages 🚀
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
         branch: gh-pages
