@@ -1,33 +1,42 @@
 @page "/analyzer"
 
 @using Model;
-@using BlazorTable;
 
-<InputFile OnChange="OnInputFileChange" />
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">Log Analyzer</MudText>
+    <InputFile id="fileInput" OnChange="OnInputFileChange" hidden />
+    <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.UploadFile" for="fileInput">Log laden</MudButton>
 
-<Table TableItem="LogEntry" Items="logs" PageSize="15" ColumnReorder="true">
-    <Column TableItem="LogEntry" Title="Id" Field="@(l => l.Row)" Sortable="true" Filterable="true" Width="auto" />
-    <Column TableItem="LogEntry" Title="Severity" Field="@(l => l.LogKind)" Sortable="true" Filterable="true" Width="auto" />
-    <Column TableItem="LogEntry" Title="Time Stamp" Field="@(l => l.TimeStamp)" Sortable="true" Filterable="true" Width="auto" />
-    <Column TableItem="LogEntry" Title="Class" Field="@(l => l.Class)" Sortable="true" Filterable="true" Width="auto">
-        <Template>
-            <div style="overflow-wrap:anywhere">@context.Class</div>
-        </Template>
-    </Column>
-    <Column TableItem="LogEntry" Title="Method" Field="@(l => l.Method)" Sortable="true" Filterable="true" Width="auto">
-        <Template>
-            <div style="overflow-wrap:anywhere">@context.Method</div>
-        </Template>
-    </Column>
-    <Column TableItem="LogEntry" Title="Message" Field="@(l => l.Message)" Sortable="true" Filterable="true" Width="auto">
-        <Template>
-            <div style="white-space:pre-wrap; overflow-wrap:anywhere">@context.Message</div>
-        </Template>
-    </Column>
-    <Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" />
-</Table>
+    <MudTable Items="logs" Dense="true" Striped="true" Hover="true" Filter="new Func<LogEntry,bool>(Filter)">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Log entries</MudText>
+            <MudToolBarSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<LogEntry, object>(l=>l.Row)">Row</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<LogEntry, object>(l=>l.LogKind)">Severity</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<LogEntry, object>(l=>l.TimeStamp)">Time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<LogEntry, object>(l=>l.Class)">Class</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<LogEntry, object>(l=>l.Method)">Method</MudTableSortLabel></MudTh>
+            <MudTh>Message</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Row">@context.Row</MudTd>
+            <MudTd DataLabel="Severity">@context.LogKind</MudTd>
+            <MudTd DataLabel="TimeStamp">@context.TimeStamp</MudTd>
+            <MudTd DataLabel="Class"><div style="overflow-wrap: anywhere;">@context.Class</div></MudTd>
+            <MudTd DataLabel="Method"><div style="overflow-wrap: anywhere;">@context.Method</div></MudTd>
+            <MudTd DataLabel="Message"><div style="overflow-wrap: anywhere; white-space:pre-wrap;">@context.Message</div></MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudContainer>
 
 @code {
+    private string searchString = "";
     private IReadOnlyList<IBrowserFile> selectedFiles = new List<IBrowserFile>();
     private IReadOnlyList<LogEntry> logs = new List<LogEntry>();
 
@@ -36,5 +45,14 @@
         var selectedFile = e.GetMultipleFiles().Single();
         logs = await LogReader.ReadLogs(selectedFile);
         StateHasChanged();
+    }
+
+    private bool Filter(LogEntry logEntry)
+    {
+        return string.IsNullOrWhiteSpace(searchString)
+            || logEntry.Class.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || logEntry.Method.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || logEntry.Message.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+            || $"{logEntry.Row}{logEntry.TimeStamp}{logEntry.LogKind}".Contains(searchString, StringComparison.OrdinalIgnoreCase);
     }
 }
