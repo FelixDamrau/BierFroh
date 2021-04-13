@@ -1,0 +1,40 @@
+@page "/analyzer"
+
+@using Model;
+@using BlazorTable;
+
+<InputFile OnChange="OnInputFileChange" />
+
+<Table TableItem="LogEntry" Items="logs" PageSize="15" ColumnReorder="true">
+    <Column TableItem="LogEntry" Title="Id" Field="@(l => l.Row)" Sortable="true" Filterable="true" Width="auto" />
+    <Column TableItem="LogEntry" Title="Severity" Field="@(l => l.LogKind)" Sortable="true" Filterable="true" Width="auto" />
+    <Column TableItem="LogEntry" Title="Time Stamp" Field="@(l => l.TimeStamp)" Sortable="true" Filterable="true" Width="auto" />
+    <Column TableItem="LogEntry" Title="Class" Field="@(l => l.Class)" Sortable="true" Filterable="true" Width="auto">
+        <Template>
+            <div style="overflow-wrap:anywhere">@context.Class</div>
+        </Template>
+    </Column>
+    <Column TableItem="LogEntry" Title="Method" Field="@(l => l.Method)" Sortable="true" Filterable="true" Width="auto">
+        <Template>
+            <div style="overflow-wrap:anywhere">@context.Method</div>
+        </Template>
+    </Column>
+    <Column TableItem="LogEntry" Title="Message" Field="@(l => l.Message)" Sortable="true" Filterable="true" Width="auto">
+        <Template>
+            <div style="white-space:pre-wrap; overflow-wrap:anywhere">@context.Message</div>
+        </Template>
+    </Column>
+    <Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" />
+</Table>
+
+@code {
+    private IReadOnlyList<IBrowserFile> selectedFiles = new List<IBrowserFile>();
+    private IReadOnlyList<LogEntry> logs = new List<LogEntry>();
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var selectedFile = e.GetMultipleFiles().Single();
+        logs = await LogReader.ReadLogs(selectedFile);
+        StateHasChanged();
+    }
+}
