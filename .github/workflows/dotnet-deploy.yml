@@ -1,0 +1,29 @@
+name: .NET Deploy To GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout 🛎
+      uses: actions/checkout@v2
+    - name: Setup .NET net 🐱‍💻
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build 🔧
+      run: dotnet publish  --configuration Release --output build
+    - name: Add .nojekyll file 👨‍🦽 # This deactivates the github pages jekyll behavior and thus allows folders with starting underscores to be deployed.
+      run: touch build/wwwroot/.nojekyll
+    - name: Deploy to GitHub Pages 🚀
+      uses: JamesIves/github-pages-deploy-action@4.1.0
+      with:
+        branch: gh-pages
+        folder: build/wwwroot
