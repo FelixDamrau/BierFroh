@@ -5,7 +5,7 @@ using BlazorTable;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LogAnalyzer
+namespace VierPro
 {
     public class Program
     {
