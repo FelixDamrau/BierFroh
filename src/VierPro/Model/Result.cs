@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace LogAnalyzer.Model
+namespace VierPro.Model
 {
     public class Result<T>
     {

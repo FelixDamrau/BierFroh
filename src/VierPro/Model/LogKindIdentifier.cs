@@ -1,4 +1,4 @@
-﻿namespace LogAnalyzer.Model
+﻿namespace VierPro.Model
 {
     public class LogKindIdentifier
     {

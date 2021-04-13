@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace LogAnalyzer.Model
+namespace VierPro.Model
 {
     public static class LogReader
     {

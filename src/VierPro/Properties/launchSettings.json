@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "LogAnalyzer": {
+    "VierPro": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

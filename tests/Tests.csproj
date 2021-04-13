@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\LogAnalyzer\LogAnalyzer.csproj" />
+    <ProjectReference Include="..\src\VierPro\VierPro.csproj" />
   </ItemGroup>
 
 </Project>

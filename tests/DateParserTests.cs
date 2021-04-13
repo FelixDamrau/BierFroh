@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using LogAnalyzer.Model;
+using VierPro.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
