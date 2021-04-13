@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BlazorTable;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using MudBlazor.Services;
 
 namespace VierPro
 {
@@ -16,6 +17,7 @@ namespace VierPro
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddBlazorTable();
+            builder.Services.AddMudServices();
             await builder.Build().RunAsync();
         }
     }
