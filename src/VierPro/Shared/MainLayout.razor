@@ -1,4 +1,5 @@
 @inherits LayoutComponentBase
+@inject IJSRuntime jsRuntime
 
 
 <MudThemeProvider />
@@ -9,9 +10,9 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudAppBarSpacer />
-        <MudIconButton Icon="@Icons.Filled.Looks4" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Filled.Looks4" Color="Color.Inherit" OnClick="PlaySound" />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+    <MudDrawer @bind-Open="drawerOpen" Elevation="1">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">Vier Profis</MudText>
         </MudDrawerHeader>
@@ -22,11 +23,34 @@
     </MudMainContent>
 </MudLayout>
 
-@code {
-    bool _drawerOpen = true;
+<audio id="oeh" src="res/oeh.mp3" />
+<audio id="oeh2" src="res/oeh2.mp3" />
+<audio id="jaja" src="res/jaja.mp3" />
 
-    void DrawerToggle()
+@code {
+    private bool drawerOpen = true;
+    private Random random = new();
+
+    private void DrawerToggle()
     {
-        _drawerOpen = !_drawerOpen;
+        drawerOpen = !drawerOpen;
+    }
+
+    private async Task PlaySound()
+    {
+        var sound = GetSound();
+        await jsRuntime.InvokeAsync<string>("PlayAudio", sound);
+    }
+
+
+    private string GetSound()
+    {
+        return random.Next(0, 3) switch
+        {
+            0 => "oeh",
+            1 => "oeh2",
+            2 => "jaja",
+            _ => "jaja"
+        };
     }
 }
