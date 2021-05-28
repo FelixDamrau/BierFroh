@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace VierPro.Model
+namespace BierFroh.Model
 {
     public class DateParser // TODO Das kann man auch einfacher machen, da hier eh angenommen wird, dass der String mit dem Date beginnt. (ParseExact)
     {

@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "VierPro": {
+    "BierFroh": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

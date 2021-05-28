@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using VierPro.Model;
+using BierFroh.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
