@@ -1,4 +1,4 @@
-﻿namespace VierPro.Model
+﻿namespace BierFroh.Model
 {
     public enum LogKind
     {

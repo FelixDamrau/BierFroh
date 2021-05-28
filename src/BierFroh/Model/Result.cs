@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace VierPro.Model
+namespace BierFroh.Model
 {
     public class Result<T>
     {

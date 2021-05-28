@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\VierPro\VierPro.csproj" />
+    <ProjectReference Include="..\src\BierFroh\BierFroh.csproj" />
   </ItemGroup>
 
 </Project>
