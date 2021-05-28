@@ -2,7 +2,7 @@
   "cacheBootResources": true,
   "config": [ ],
   "debugBuild": false,
-  "entryAssembly": "VierPro",
+  "entryAssembly": "BierFroh",
   "icuDataMode": 0,
   "linkerEnabled": true,
   "resources": {
@@ -24,7 +24,7 @@
       "Microsoft.JSInterop.WebAssembly.dll": "sha256-BAtOvcFEyZD9Ri0p2J3817Dix5MZpPSaQ8WRLE3FRKM=",
       "MudBlazor.dll": "sha256-5Vu9NCqJ06kQ8fsbvOsjb6\/yi1ff7uCo1tKUa4bxt5o=",
       "System.IO.Pipelines.dll": "sha256-qZYTUS+ga7CydtH54fYPbehFCvx3B49I74G8dxreTog=",
-      "VierPro.dll": "sha256-3XvG5c0c7dOLM1SogA+HLNsft6OOi\/xw9gpA6aDV1cU=",
+      "BierFroh.dll": "sha256-RqBwbu1S+6D+0iy9Rl9hDGFG240C5xseh7a12uhb5DE=",
       "System.Collections.Concurrent.dll": "sha256-wHyvzPvyAYzkBqcEuBllPgauB7HCwFEO286TasRK2Wc=",
       "System.Collections.Immutable.dll": "sha256-STcaWuOjCPfqI1ff5tnHVbV9tacMy2x1kGVwTP3r5H0=",
       "System.Collections.NonGeneric.dll": "sha256-kh4CM8tXosorLxhPbkD5HiKHP88ncWBDvPuSqe2ybhI=",
