@@ -1,0 +1,47 @@
+﻿@page "/kicktipp"
+
+@using BierFroh.Model;
+@using KickTippHistory.Core;
+@using KickTippHistory.Core.Model;
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">KickTipp Data</MudText>
+
+    <InputFile id="fileInput" OnChange="UploadFile" hidden accept=".html,.htm" />
+    <MudButton HtmlTag="label"
+               Variant="Variant.Filled"
+               Color="Color.Primary"
+               StartIcon="@Icons.Filled.FileUpload"
+               for="fileInput">
+        Upload File
+    </MudButton>
+
+    @if (series.Count > 0)
+    {
+        <MudChart ChartType="ChartType.Line" ChartSeries="@series" XAxisLabels="@xAxisLabels" Width="100%" Height="550"></MudChart>
+    }
+
+</MudContainer>
+
+@code
+{
+    private readonly string[] xAxisLabels = Enumerable.Range(1, 34).Select(i => i.ToString()).ToArray();
+
+    private List<ChartSeries> series = new List<ChartSeries>() { };
+
+    private KickTippHistory.Core.Result<Season> season = KickTippHistory.Core.Result<Season>.CreateError("Not loaded yet");
+
+    private async void UploadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.GetMultipleFiles().Single();
+        var jsonText = await BrowserFileReader.ReadFile(file);
+        season = await SeasonParser.Parse(jsonText);
+        if (!season.Valid)
+            return;
+
+        var allSeries = ChartSeriesHelper.Convert(season.Value);
+        var nonEmptySeries = ChartSeriesHelper.CleanUp(allSeries);
+        series = nonEmptySeries.ToList();
+        StateHasChanged();
+    }
+}
