@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using BierFroh.Common;
 
 namespace BierFroh.Model
 {
@@ -10,7 +11,7 @@ namespace BierFroh.Model
         public static Result<DateTime> GetDate(string rawData)
         {
             if (rawData.Length == 0 || !char.IsDigit(rawData[0]))
-                return new Result<DateTime>("Could not parse the date string.");
+                return Result<DateTime>.CreateError("Could not parse the date string.");
 
             var match = regex.Match(rawData);
             if (int.TryParse(match.Groups["day"].Value, out var day)
@@ -22,10 +23,10 @@ namespace BierFroh.Model
                 && int.TryParse(match.Groups["millisecond"].Value, out var millisecond))
             {
                 var date = new DateTime(year, month, day, hour, minute, second, millisecond);
-                return new Result<DateTime>(date);
+                return Result<DateTime>.CreateValid(date);
             }
             var errorMessage = $"Could not parse the date string: {match.Value}";
-            return new Result<DateTime>(errorMessage);
+            return Result<DateTime>.CreateError(errorMessage);
         }
     }
 }

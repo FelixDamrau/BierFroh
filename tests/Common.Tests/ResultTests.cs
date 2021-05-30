@@ -1,7 +1,7 @@
-﻿using KickTippHistory.Core;
+﻿using BierFroh.Common;
 using Xunit;
 
-namespace KickTippHistory.Tests.Core
+namespace BierFroh.Common.Tests
 {
     public class ResultTests
     {

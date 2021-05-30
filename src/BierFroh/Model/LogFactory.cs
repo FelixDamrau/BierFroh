@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
+using BierFroh.Common;
 
 namespace BierFroh.Model
 {
@@ -13,7 +14,7 @@ namespace BierFroh.Model
             if (!date.Valid)
             {
                 var errorMessage = $"Failed to parse date. Error: {date.ErrorMessage}";
-                return new Result<LogEntry>(errorMessage);
+                return Result<LogEntry>.CreateError(errorMessage);
             }
 
             var logKind = LogKindIdentifier.GetLogKind(rawData);
@@ -25,7 +26,7 @@ namespace BierFroh.Model
             var methodString = methodMatch.Success ? methodMatch.Groups["method"].Value : string.Empty;
 
             var logEntry = new LogEntry(row, logKind, classString, methodString, rawData, rawData, date.Value);
-            return new Result<LogEntry>(logEntry);
+            return Result<LogEntry>.CreateValid(logEntry);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AngleSharp.Html.Dom;
+using BierFroh.Common;
 using KickTippHistory.Core.Model;
 
 namespace KickTippHistory.Core
