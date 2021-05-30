@@ -1,5 +1,4 @@
-﻿using BierFroh.Common;
-using Xunit;
+﻿using Xunit;
 
 namespace BierFroh.Common.Tests
 {
