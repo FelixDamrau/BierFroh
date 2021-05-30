@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace KickTippHistory.Core
+namespace BierFroh.Common
 {
     public class Result<T>
     {

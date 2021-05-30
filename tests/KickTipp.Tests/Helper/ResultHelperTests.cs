@@ -1,5 +1,5 @@
 ﻿using System;
-using KickTippHistory.Core;
+using BierFroh.Common;
 using Xunit;
 
 namespace KickTippHistory.Tests.Core.Helper

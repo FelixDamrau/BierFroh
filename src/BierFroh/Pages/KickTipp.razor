@@ -1,5 +1,6 @@
 ﻿@page "/kicktipp"
 
+@using BierFroh.Common;
 @using BierFroh.Model;
 @using KickTippHistory.Core;
 @using KickTippHistory.Core.Model;
@@ -29,7 +30,7 @@
 
     private List<ChartSeries> series = new List<ChartSeries>() { };
 
-    private KickTippHistory.Core.Result<Season> season = KickTippHistory.Core.Result<Season>.CreateError("Not loaded yet");
+    private Result<Season> season = Result<Season>.CreateError("Not loaded yet");
 
     private async void UploadFile(InputFileChangeEventArgs e)
     {
