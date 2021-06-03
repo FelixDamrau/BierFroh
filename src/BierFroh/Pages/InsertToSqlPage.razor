@@ -1,0 +1,103 @@
+﻿@page "/inserttosql"
+
+@using System.IO;
+@using InsertToSql;
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">Insert to SQL</MudText>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudTextFieldString HelperText="Insert SQL query result, including headers, here" Label="raw data" Variant="Variant.Outlined" @bind-Value="rawData" Lines="6" />
+        </MudItem>
+        <MudItem>
+            <MudButton StartIcon="@Icons.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick">Parse</MudButton>
+        </MudItem>
+        <MudItem>
+            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick">Refresh Query</MudButton>
+        </MudItem>
+        <MudItem xs="2">
+            <MudTextFieldString @bind-Text="tableName" Label="table name"></MudTextFieldString>
+        </MudItem>
+    </MudGrid>
+
+    @if (tableData.Count > 0)
+    {
+        <MudTable Height="300px" FixedHeader="true" Items="tableData.Skip(1)" Dense="true" Striped="true" Hover="true">
+            <HeaderContent>
+                @foreach (var header in tableData[0])
+                {
+                    <MudTh>@header</MudTh>
+                }
+            </HeaderContent>
+            <RowTemplate>
+                @foreach (var (value, index) in context.Select((value, i) => (value, i)))
+                    {
+                    <MudTd DataLabel="@index.ToString()">@value</MudTd>
+                    }
+            </RowTemplate>
+            <RowEditingTemplate>
+                @foreach (var (value, index) in context.Select((value, i) => (value, i)))
+                    {
+                    <MudTd DataLabel="@index.ToString()">
+                        <MudTextField @bind-Value="context[index]" />
+                    </MudTd>
+                    }
+            </RowEditingTemplate>
+        </MudTable>
+
+        <MudTextField Style="font-family:monospace" Lines="8" Label="SQL Query" @bind-Value="sqlQuery"></MudTextField>
+    }
+</MudContainer>
+
+@code {
+    private string rawData = string.Empty;
+    private string sqlQuery = string.Empty;
+    private string tableName = "table";
+    private IReadOnlyList<List<string>> tableData = new List<List<string>>();
+
+    private void ParseClick(MouseEventArgs e)
+    {
+        var reader = new StringReader(rawData);
+        var parser = new RawDataParser(reader);
+        var list = new List<List<string>>();
+        while (parser.Read())
+        {
+            var line = parser.GetLineData();
+            list.Add(line.ToList());
+        }
+        tableData = list;
+
+        UpdateSqlStatement();
+    }
+
+    private void RefreshQueryClick(MouseEventArgs e)
+    {
+        UpdateSqlStatement();
+    }
+
+    private void UpdateSqlStatement()
+    {
+        if (tableData.Count < 2)
+        {
+            sqlQuery = string.Empty;
+            return;
+        }
+
+        var valueRows = tableData.Skip(1).Select(t => $"  {CreateValueRow(t)}");
+        sqlQuery = $"INSERT INTO [{tableName}] ( { CreateSelectedRows(tableData[0]) } )\r\n" +
+                $"VALUES \r\n" +
+                $"{string.Join(",\r\n", valueRows)}";
+    }
+
+    private string CreateValueRow(IReadOnlyList<string> row)
+    {
+        var parsedCells = row.Select(c => SqlValueFormatter.Parse(c));
+        return $"( {string.Join(", ", parsedCells)} )";
+    }
+
+    private string CreateSelectedRows(IReadOnlyList<string> row)
+    {
+        var rowNames = row.Select(c => $"[{c}]");
+        return string.Join(", ", rowNames);
+    }
+}
