@@ -1,6 +1,7 @@
 ﻿@page "/inserttosql"
 
 @using System.IO;
+@using BierFroh.Components;
 @using InsertToSql;
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
@@ -8,6 +9,9 @@
     <MudGrid>
         <MudItem xs="12">
             <MudTextFieldString HelperText="Insert SQL query result, including headers, here" Label="raw data" Variant="Variant.Outlined" @bind-Value="rawData" Lines="6" />
+        </MudItem>
+        <MudItem>
+            <MudButton StartIcon="@Icons.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">Test data</MudButton>
         </MudItem>
         <MudItem>
             <MudButton StartIcon="@Icons.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick">Parse</MudButton>
@@ -22,29 +26,7 @@
 
     @if (tableData.Count > 0)
     {
-        <MudTable Height="300px" FixedHeader="true" Items="tableData.Skip(1)" Dense="true" Striped="true" Hover="true">
-            <HeaderContent>
-                @foreach (var header in tableData[0])
-                {
-                    <MudTh>@header</MudTh>
-                }
-            </HeaderContent>
-            <RowTemplate>
-                @foreach (var (value, index) in context.Select((value, i) => (value, i)))
-                    {
-                    <MudTd DataLabel="@index.ToString()">@value</MudTd>
-                    }
-            </RowTemplate>
-            <RowEditingTemplate>
-                @foreach (var (value, index) in context.Select((value, i) => (value, i)))
-                    {
-                    <MudTd DataLabel="@index.ToString()">
-                        <MudTextField @bind-Value="context[index]" />
-                    </MudTd>
-                    }
-            </RowEditingTemplate>
-        </MudTable>
-
+        <InsertToSqlTable Content="tableData.Skip(1).ToList()" Headers="tableData[0]" ActiveColumnsChanged="ActiveColumsChanged" />
         <MudTextField Style="font-family:monospace" Lines="8" Label="SQL Query" @bind-Value="sqlQuery"></MudTextField>
     }
 </MudContainer>
@@ -54,6 +36,12 @@
     private string sqlQuery = string.Empty;
     private string tableName = "table";
     private IReadOnlyList<List<string>> tableData = new List<List<string>>();
+    private bool[] activeColums = Array.Empty<bool>();
+
+    private void ActiveColumsChanged(bool[] activeColumns)
+    {
+        this.activeColums = activeColumns;
+    }
 
     private void ParseClick(MouseEventArgs e)
     {
@@ -75,6 +63,14 @@
         UpdateSqlStatement();
     }
 
+    private void GenerateTestDataClick(MouseEventArgs e)
+    {
+        rawData =
+            "Text\tNumber\tDateTime\r\n" +
+            "foo\t5\t2021-03-04 01:03:04.000\r\n" +
+            "bar\t12\t2021-05-04 13:43:32.302\r\n";
+    }
+
     private void UpdateSqlStatement()
     {
         if (tableData.Count < 2)
@@ -84,20 +80,33 @@
         }
 
         var valueRows = tableData.Skip(1).Select(t => $"  {CreateValueRow(t)}");
+
         sqlQuery = $"INSERT INTO [{tableName}] ( { CreateSelectedRows(tableData[0]) } )\r\n" +
                 $"VALUES \r\n" +
                 $"{string.Join(",\r\n", valueRows)}";
     }
 
+
     private string CreateValueRow(IReadOnlyList<string> row)
     {
-        var parsedCells = row.Select(c => SqlValueFormatter.Parse(c));
+        var parsedCells = row
+            .Where((_, index) => IsActive(index))
+            .Select(c => SqlValueFormatter.Parse(c));
         return $"( {string.Join(", ", parsedCells)} )";
     }
 
     private string CreateSelectedRows(IReadOnlyList<string> row)
     {
-        var rowNames = row.Select(c => $"[{c}]");
+        var rowNames = row
+            .Where((_, index) => IsActive(index))
+            .Select(c => $"[{c}]");
         return string.Join(", ", rowNames);
+    }
+
+    private bool IsActive(int index)
+    {
+        if (activeColums.Length <= index)
+            return true;
+        return activeColums[index];
     }
 }

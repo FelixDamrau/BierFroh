@@ -1,0 +1,55 @@
+﻿@using InsertToSql;
+
+<MudTable Height="300px" FixedHeader="true" Items="Content" Dense="true" Striped="true" Hover="true">
+    <HeaderContent>
+        @foreach (var (header, index) in Headers.Select((value, i) => (value, i)))
+        {
+            <MudTh><MudCheckBox Checked="@activeColumnIndices[index]" CheckedChanged="@((bool b) => CheckedChanged(b, index))" />@header</MudTh>
+        }
+    </HeaderContent>
+    <RowTemplate>
+        @foreach (var (value, index) in context.Select((value, i) => (value, i)))
+        {
+            <MudTd DataLabel="@index.ToString()">@value</MudTd>
+        }
+    </RowTemplate>
+    <RowEditingTemplate>
+        @foreach (var index in context.Select((value, i) => i))
+        {
+            <MudTd DataLabel="@index.ToString()">
+                <MudTextField @bind-Value="context[index]" />
+            </MudTd>
+        }
+    </RowEditingTemplate>
+</MudTable>
+
+@code{
+    private IReadOnlyList<string> headers = new List<string>();
+    [Parameter]
+    public IReadOnlyList<string> Headers
+    {
+        get => headers;
+        set
+        {
+            if (value != headers)
+            {
+                activeColumnIndices = Enumerable.Repeat(true, value.Count).ToArray();
+                headers = value;
+            }
+        }
+    }
+
+    [Parameter]
+    public IReadOnlyList<List<string>> Content { get; set; } = new List<List<string>>();
+
+    [Parameter]
+    public EventCallback<bool[]> ActiveColumnsChanged { get; set; }
+
+    private bool[] activeColumnIndices = Array.Empty<bool>();
+
+    private async void CheckedChanged(bool isActive, int index)
+    {
+        activeColumnIndices[index] = isActive;
+        await ActiveColumnsChanged.InvokeAsync(activeColumnIndices);
+    }
+}
