@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using BierFroh.Model;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Tests
 {
-    [TestClass]
     public class DateParserTests
     {
         public static IEnumerable<object[]> GetPaseValidDateData()
@@ -15,15 +14,15 @@ namespace Tests
             yield return new object[] { "2020-03-04 05:06:07,890 Yop!", new DateTime(2020, 3, 4, 5, 6, 7, 890) };
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(GetPaseValidDateData), DynamicDataSourceType.Method)]
+        [Theory]
+        [MemberData(nameof(GetPaseValidDateData))]
         public void ParseValidDate(string dateString, DateTime expectedResult)
         {
             var date = DateParser.GetDate(dateString);
 
-            Assert.IsTrue(date.Valid);
-            Assert.IsNull(date.ErrorMessage);
-            Assert.AreEqual(expectedResult, date.Value);
+            Assert.True(date.Valid);
+            Assert.Null(date.ErrorMessage);
+            Assert.Equal(expectedResult, date.Value);
         }
 
         public static IEnumerable<object[]> GetPaseInvalidDateData()
@@ -33,14 +32,14 @@ namespace Tests
             yield return new object[] { "Foo" };
         }
 
-        [DataTestMethod]
-        [DynamicData(nameof(GetPaseInvalidDateData), DynamicDataSourceType.Method)]
+        [Theory]
+        [MemberData(nameof(GetPaseInvalidDateData))]
         public void ParseInvalidDate(string dateString)
         {
             var date = DateParser.GetDate(dateString);
 
-            Assert.IsFalse(date.Valid);
-            Assert.IsNotNull(date.ErrorMessage);
+            Assert.False(date.Valid);
+            Assert.NotNull(date.ErrorMessage);
         }
     }
 }
