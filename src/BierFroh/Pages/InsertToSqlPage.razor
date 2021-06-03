@@ -27,7 +27,9 @@
     @if (tableData.Count > 0)
     {
         <InsertToSqlTable Content="tableData.Skip(1).ToList()" Headers="tableData[0]" ActiveColumnsChanged="ActiveColumsChanged" />
-        <MudTextField Style="font-family:monospace" Lines="8" Label="SQL Query" @bind-Value="sqlQuery"></MudTextField>
+        <MudItem xs="12">
+            <MudTextField Style="font-family:monospace" Lines="8" Label="SQL Query" @bind-Value="sqlQuery" />
+        </MudItem>
     }
 </MudContainer>
 
