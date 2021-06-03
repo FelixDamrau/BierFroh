@@ -1,0 +1,94 @@
+﻿@page "/inserttosql"
+
+@using System.IO;
+@using InsertToSql;
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <div class="mt-16">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudText Typo="Typo.h3" GutterBottom="true">Insert to SQL</MudText>
+            </MudItem>
+            <MudItem xs="12">
+                <MudInput Style="width:fit-content" T="string" Variant="Variant.Outlined" @bind-Value="rawData" Lines="8" />
+            </MudItem>
+            <MudItem xs="2">
+                <MudButton OnClick="ParseClick">Parse</MudButton>
+            </MudItem>
+        </MudGrid>
+    </div>
+
+    @if (tableData.Count > 0)
+    {
+        <MudSimpleTable Dense=true Hover=true Striped=true>
+            <thead>
+                <tr>
+                    @foreach (var (header, index) in tableData[0].Select((value, i) => (value, i)))
+                    {
+                        <th>@header</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tableRow in tableData.Skip(1))
+                {
+                    <tr>
+                        @foreach (var cell in tableRow)
+                        {
+                            <td>@cell</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </MudSimpleTable>
+
+        <MudTextField Style="font-family:monospace" Lines="8" Label="SQL Query" @bind-Value="sqlQuery"></MudTextField>
+    }
+</MudContainer>
+
+@code {
+    private string sqlQuery = string.Empty;
+    private string rawData = string.Empty;
+    private IReadOnlyList<IReadOnlyList<string>> tableData = new List<List<string>>();
+    private int columns;
+
+    private void ParseClick(MouseEventArgs e)
+    {
+        if (rawData is null)
+            return;
+
+        var reader = new StringReader(rawData);
+        var parser = new RawDataParser(reader);
+        var list = new List<IReadOnlyList<string>>();
+        while (parser.Read())
+        {
+            var line = parser.GetLineData();
+            list.Add(line);
+        }
+        tableData = list;
+        columns = tableData.Count > 0 ? tableData[0].Count : 0;
+
+        UpdateSqlStatement();
+        StateHasChanged();
+    }
+
+    private void UpdateSqlStatement()
+    {
+        if (tableData.Count < 2)
+        {
+            sqlQuery = string.Empty;
+            return;
+        }
+
+        var valueRows = tableData.Skip(1).Select(t => $"  {CreateValueRow(t)}");
+        sqlQuery = "INSERT INTO table\r\n" +
+                $"VALUES \r\n" +
+                $"{string.Join(",\r\n", valueRows)}";
+    }
+
+    private string CreateValueRow(IReadOnlyList<string> row)
+    {
+        var parsedCells = row.Select(c => SqlValueFormatter.Parse(c));
+        return $"( {string.Join(", ", parsedCells)} )";
+    }
+}
