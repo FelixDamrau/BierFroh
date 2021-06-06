@@ -1,6 +1,33 @@
 ﻿@page "/"
 
+@using BierFroh.State;
+
+@inject AppStateProvider appStateProvider;
+
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
     <MudText Typo="Typo.h3" GutterBottom="true">Hello!</MudText>
     <MudText Class="mb-8">This landing page is useless right now. U•ェ•*U</MudText>
+    <MudText Class="mb-8">Last visit: @lastVisitDay</MudText>
 </MudContainer>
+
+@code{
+
+    private RootState? rootState;
+    private string lastVisitDay = "never";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var appStateResult = await appStateProvider.Get();
+        if (appStateResult.Valid)
+        {
+            rootState = appStateResult.Value.RootState;
+            lastVisitDay = rootState.LastVisit.ToString();
+            await appStateProvider.Update(rootState with { LastVisit = DateTime.Now });
+        }
+        else
+        {
+            await appStateProvider.Update(RootState.Default);
+        }
+        await base.OnInitializedAsync();
+    }
+}
