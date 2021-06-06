@@ -17,17 +17,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var appStateResult = await appStateProvider.Get();
-        if (appStateResult.Valid)
-        {
-            rootState = appStateResult.Value.RootState;
-            lastVisitDay = rootState.LastVisit.ToString();
-            await appStateProvider.Update(rootState with { LastVisit = DateTime.Now });
-        }
-        else
-        {
-            await appStateProvider.Update(RootState.Default);
-        }
+        var appState = await appStateProvider.Get();
+        rootState = appState.RootState;
+        lastVisitDay = rootState.LastVisit?.ToString() ?? "never";
+        await appStateProvider.Update(rootState with { LastVisit = DateTime.Now });
+
         await base.OnInitializedAsync();
     }
 }
