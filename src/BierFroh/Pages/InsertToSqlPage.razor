@@ -1,7 +1,10 @@
 ﻿@page "/inserttosql"
 
+@inject BrowserStorageProvider browserStorageProvider;
+
 @using System.IO;
 @using BierFroh.Components;
+@using BierFroh.Model.BrowserStorage;
 @using InsertToSql;
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
@@ -23,7 +26,7 @@
             <CopyToClipboardButton Copy="@sqlQuery" />
         </MudItem>
         <MudItem xs="2">
-            <MudTextFieldString @bind-Text="tableName" Label="table name"></MudTextFieldString>
+            <MudAutocomplete T="string" SearchFunc="Search1" @bind-Text="tableName" Label="table name" />
         </MudItem>
 
         @if (tableData.Count > 0)
@@ -39,9 +42,11 @@
 </MudContainer>
 
 @code {
+    private const string defaultTableName = "table";
     private string rawData = string.Empty;
     private string sqlQuery = string.Empty;
-    private string tableName = "table";
+    private string tableName = defaultTableName;
+    private IList<string> tableNameCache = new List<string>();
     private IReadOnlyList<List<string>> tableData = new List<List<string>>();
     private bool[] activeColums = Array.Empty<bool>();
 
@@ -63,6 +68,7 @@
         tableData = list;
 
         UpdateSqlStatement();
+        AddNewTableNameToAppState();
     }
 
     private void RefreshQueryClick(MouseEventArgs e)
@@ -115,5 +121,22 @@
         if (activeColums.Length <= index)
             return true;
         return activeColums[index];
+    }
+
+    private async Task<IEnumerable<string>> Search1(string? value)
+        => await Task.Run(() => tableNameCache.Where(x => x.Contains(value ?? string.Empty, StringComparison.InvariantCultureIgnoreCase)));
+
+    private async Task AddNewTableNameToAppState()
+    {
+        if (tableName == defaultTableName || tableNameCache.Contains(tableName))
+            return;
+
+        tableNameCache.Add(tableName);
+        var appStateResult = await browserStorageProvider.Get();
+
+        var appState = appStateResult.Valid ? appStateResult.Value : AppState.Default;
+
+        var newAppState = appState with { InsertToSqlState = appState.InsertToSqlState with { CachedTableNames = tableNameCache } };
+        await browserStorageProvider.Set(newAppState);
     }
 }
