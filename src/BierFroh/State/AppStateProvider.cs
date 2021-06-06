@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using System.Threading.Tasks;
-using BierFroh.Common;
 using Microsoft.JSInterop;
 
 namespace BierFroh.State
@@ -14,19 +13,19 @@ namespace BierFroh.State
             this.jSRuntime = jSRuntime;
         }
 
-        public async ValueTask<Result<AppState>> Get()
+        public async ValueTask<AppState> Get()
         {
             var data = await jSRuntime.InvokeAsync<string>("localStorage.getItem", "AppState");
             if (data is null)
-                return Result<AppState>.CreateError("No appstate has been found");
+                return AppState.Default;
 
             var appState = System.Text.Json.JsonSerializer.Deserialize<AppState>(data);
             if (appState is null)
-                return Result<AppState>.CreateError("Could not deserialize the browser cache data.");
+                return AppState.Default;
 
             var validatedAppState = Validate(appState);
 
-            return Result<AppState>.CreateValid(validatedAppState);
+            return validatedAppState;
         }
 
         private static AppState Validate(AppState appState)
@@ -43,11 +42,7 @@ namespace BierFroh.State
 
         public async ValueTask Update(RootState rootState)
         {
-            var appStateResult = await Get();
-            if (!appStateResult.Valid)
-                return;
-
-            var appState = appStateResult.Value;
+            var appState = await Get();
             var newAppState = appState with { RootState = rootState };
             await Set(newAppState);
         }
