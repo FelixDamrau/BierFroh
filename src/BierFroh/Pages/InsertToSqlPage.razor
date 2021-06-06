@@ -19,6 +19,9 @@
         <MudItem>
             <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick">Refresh Query</MudButton>
         </MudItem>
+        <MudItem>
+            <CopyToClipboardButton Copy="@sqlQuery" />
+        </MudItem>
         <MudItem xs="2">
             <MudTextFieldString @bind-Text="tableName" Label="table name"></MudTextFieldString>
         </MudItem>
