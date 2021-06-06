@@ -1,0 +1,46 @@
+﻿@inject IJSRuntime jSRuntime;
+
+<MudTooltip Text="Copy to clipboard">
+    <MudIconButton Icon="@Icons.Material.Filled.ContentPaste" OnClick="CopyToClipboard" />
+</MudTooltip>
+
+@code{
+    private string toggleIconName = Icons.Material.Filled.ContentPaste;
+    private string? copy;
+    [Parameter]
+    public string? Copy
+    {
+        get => copy;
+        set
+        {
+            if (copy != value)
+            {
+                ValueChanged();
+                copy = value;
+                toggleIconName = Icons.Material.Filled.ContentPaste;
+            }
+        }
+    }
+
+    private void ValueChanged()
+    {
+
+    }
+
+    private async Task CopyToClipboard()
+    {
+        if (copy is null)
+            return;
+
+        // Writing to the clipboard may be denied, so you must handle the exception
+        try
+        {
+            await jSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", copy);
+            toggleIconName = Icons.Material.Filled.CheckCircle;
+        }
+        catch
+        {
+            Console.WriteLine("Cannot write text to clipboard");
+        }
+    }
+}
