@@ -1,10 +1,20 @@
-﻿<MudThemeProvider Theme="currentTheme" />
+﻿@using BierFroh.State;
 
-<MudTooltip Text="Toggle dark/light theme">
-    <MudToggleIconButton Icon="@Icons.Material.Filled.Brightness4" ToggledIcon="@Icons.Material.Filled.Brightness5" ToggledChanged="DarkMode" />
+@inject AppStateProvider appStateProvider;
+
+<MudThemeProvider Theme="currentTheme" />
+
+<MudTooltip Text="@tooltipCurrent">
+    <MudIconButton Icon="@iconCurrent" OnClick="ChangeDarkMode" />
 </MudTooltip>
 
 @code{
+    private const string tooltipToLightMode = "See the light";
+    private const string tooltipToDarkMode = "Be in the dark";
+    private static readonly string iconDarkMode = Icons.Material.Filled.Brightness4;
+    private static readonly string iconLightMode = Icons.Material.Filled.Brightness5;
+    private string iconCurrent = iconLightMode;
+    private string tooltipCurrent = tooltipToLightMode;
     private MudTheme currentTheme = new MudTheme();
     private MudTheme defaultTheme = new MudTheme()
     {
@@ -40,13 +50,40 @@
         }
     };
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        currentTheme = defaultTheme;
+        await InitDarkMode();
+        await base.OnInitializedAsync();
     }
 
-    private void DarkMode(bool activateDarkMode)
+    private async Task ChangeDarkMode()
     {
-        currentTheme = activateDarkMode ? darkTheme : defaultTheme;
+        var appState = await appStateProvider.Get();
+        var isDarkMode = !appState.RootState.IsDarkMode;
+        ApplyDarkMode(appState.RootState, isDarkMode);
+        await Save(appState.RootState, isDarkMode);
     }
+
+    private async Task InitDarkMode()
+    {
+        var appState = await appStateProvider.Get();
+        var isDarkMode = appState.RootState.IsDarkMode;
+        ApplyDarkMode(appState.RootState, isDarkMode);
+    }
+
+    private void ApplyDarkMode(RootState rootState, bool idDarkMode)
+    {
+        iconCurrent = GetIcon(idDarkMode);
+        tooltipCurrent = GetTooltip(idDarkMode);
+        currentTheme = idDarkMode ? darkTheme : defaultTheme;
+    }
+
+    private async Task Save(RootState rootState, bool isDarkMode)
+    {
+        if (rootState.IsDarkMode != isDarkMode)
+            await appStateProvider.Update(rootState with { IsDarkMode = isDarkMode });
+    }
+
+    private string GetIcon(bool isDarkMode) => isDarkMode ? iconLightMode : iconDarkMode;
+    private string GetTooltip(bool isDarkMode) => isDarkMode ? tooltipToLightMode : tooltipToDarkMode;
 }

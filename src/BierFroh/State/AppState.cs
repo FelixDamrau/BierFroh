@@ -12,12 +12,13 @@ namespace BierFroh.State
                 );
     }
 
-    internal record RootState(int Version, DateTime? LastVisit)
+    internal record RootState(int Version, DateTime? LastVisit, bool IsDarkMode)
     {
         public const int ProgramVersion = 1;
 
         public static RootState Default => new(
             Version: ProgramVersion,
-            LastVisit: null);
+            LastVisit: null,
+            IsDarkMode: false);
     }
 }
