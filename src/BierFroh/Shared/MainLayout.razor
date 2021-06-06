@@ -2,7 +2,6 @@
 @inject IJSRuntime jsRuntime
 
 
-<MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -10,7 +9,8 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudAppBarSpacer />
-        <MudIconButton Icon="@Icons.Filled.Looks4" Color="Color.Inherit" OnClick="PlaySound" />
+        <BierFroh.Components.BierFrohThemeProvider />
+        <MudIconButton Icon="@Icons.Material.Filled.Looks4" Color="Color.Inherit" OnClick="PlaySound" />
     </MudAppBar>
     <MudDrawer @bind-Open="drawerOpen" Elevation="1">
         <MudDrawerHeader>
