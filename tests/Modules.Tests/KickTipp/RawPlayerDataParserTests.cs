@@ -7,7 +7,7 @@ public class RawPlayerDataParserTests
     [Fact]
     public async void TestDataReturns14RawPlayerData()
     {
-        var data = ReadTestData();
+        var data = TestData.GetTotal();
 
         var playerData = await RawPlayerDataParser.GetAllRawPlayerData(data);
 
@@ -23,10 +23,5 @@ public class RawPlayerDataParserTests
         var playerData = await RawPlayerDataParser.GetAllRawPlayerData(data);
 
         Assert.False(playerData.Valid);
-    }
-
-    private static string ReadTestData()
-    {
-        return File.ReadAllText("./KickTipp/data/total.html");
     }
 }

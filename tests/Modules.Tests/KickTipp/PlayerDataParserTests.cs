@@ -1,4 +1,5 @@
 ﻿using BierFroh.Modules.KickTipp;
+using BierFroh.Modules.Tests.KickTipp.Helper;
 
 namespace BierFroh.Modules.Tests.KickTipp;
 public class PlayerDataParserTests
@@ -6,7 +7,7 @@ public class PlayerDataParserTests
     [Fact]
     public async void ValidInputGivesValidResult()
     {
-        var data = ReadTestData();
+        var data = TestData.GetTotal();
         var rawData = await RawPlayerDataParser.GetAllRawPlayerData(data);
         var result = PlayerDataParser.Parse(rawData.Value.First());
 
@@ -50,7 +51,7 @@ public class PlayerDataParserTests
     [InlineData(34)]
     public async void TestDataMatchDayPointsAreValid(int matchDay)
     {
-        var data = ReadTestData();
+        var data = TestData.GetTotal();
         var rawData = await RawPlayerDataParser.GetAllRawPlayerData(data);
         var playerSeasonResult = PlayerDataParser.Parse(rawData.Value.ElementAt(1));
 
@@ -96,7 +97,7 @@ public class PlayerDataParserTests
     [InlineData(34, 15)]
     public async void TestDataMatchDayPointsAreCorrect(int matchDay, int expectedPoints)
     {
-        var data = ReadTestData();
+        var data = TestData.GetTotal();
         var rawData = await RawPlayerDataParser.GetAllRawPlayerData(data);
         var playerSeasonResult = PlayerDataParser.Parse(rawData.Value.ElementAt(1));
 
@@ -122,16 +123,11 @@ public class PlayerDataParserTests
     [InlineData(13, "TuS_Arminia_MC")]
     public async void TestDataMatchDayPlayerNamesAreCorrect(int playerNumber, string playerName)
     {
-        var data = ReadTestData();
+        var data = TestData.GetTotal();
         var rawData = await RawPlayerDataParser.GetAllRawPlayerData(data);
 
         var playerSeasonResult = PlayerDataParser.Parse(rawData.Value.ElementAt(playerNumber));
 
         Assert.Equal(playerName, playerSeasonResult.Value.PlayerName);
-    }
-
-    private static string ReadTestData()
-    {
-        return File.ReadAllText("./KickTipp/data/total.html");
     }
 }

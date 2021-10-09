@@ -1,4 +1,5 @@
 ﻿using BierFroh.Modules.KickTipp;
+using BierFroh.Modules.Tests.KickTipp.Helper;
 
 namespace BierFroh.Modules.Tests.KickTipp;
 public class SeasonParserTests
@@ -14,15 +15,10 @@ public class SeasonParserTests
     [Fact]
     public async void TestDataYields14PlayerSeasonResults()
     {
-        var data = ReadTestData();
+        var data = TestData.GetTotal();
 
         var season = await SeasonParser.Parse(data);
 
         Assert.Equal(14, season.Value.PlayerResults.Count());
-    }
-
-    private static string ReadTestData()
-    {
-        return File.ReadAllText("./KickTipp/data/total.html");
     }
 }
