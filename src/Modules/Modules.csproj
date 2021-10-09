@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>BierFroh.Modules</AssemblyName>
-    <RootNamespace>BierFroh.Modules</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>BierFroh.Modules</AssemblyName>
+    <RootNamespace>BierFroh.Modules</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

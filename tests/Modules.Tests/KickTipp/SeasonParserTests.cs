@@ -23,6 +23,6 @@ public class SeasonParserTests
 
     private static string ReadTestData()
     {
-        return File.ReadAllText("./data/total.html");
+        return File.ReadAllText("./KickTipp/data/total.html");
     }
 }
