@@ -1,9 +1,9 @@
 ﻿@page "/kicktipp"
 
-@using BierFroh.Common;
 @using BierFroh.Model;
-@using KickTippHistory.Core;
-@using KickTippHistory.Core.Model;
+@using BierFroh.Modules.KickTipp
+@using BierFroh.Modules.KickTipp.Model
+@using Develix.Essentials.Core
 
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
     <MudText Typo="Typo.h3" GutterBottom="true">KickTipp Data</MudText>
@@ -30,7 +30,7 @@
 
     private List<ChartSeries> series = new List<ChartSeries>() { };
 
-    private Result<Season> season = Result<Season>.CreateError("Not loaded yet");
+    private Result<Season> season = Result.Fail<Season>("Not loaded yet");
 
     private async void UploadFile(InputFileChangeEventArgs e)
     {
