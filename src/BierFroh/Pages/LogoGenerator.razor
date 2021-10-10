@@ -1,0 +1,14 @@
+﻿@page "/logogenerator"
+@using BierFroh.Components
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">Logo Generator</MudText>
+
+    <MudText><Logo @ref=logo /></MudText>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick=@(e => @logo?.Create())>Create Image</MudButton>
+
+</MudContainer>
+
+@code{
+    private Logo? logo;
+}

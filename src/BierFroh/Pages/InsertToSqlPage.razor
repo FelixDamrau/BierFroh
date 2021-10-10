@@ -8,7 +8,7 @@
     <MudText Typo="Typo.h3" GutterBottom="true">Insert to SQL</MudText>
     <MudGrid>
         <MudItem xs="12">
-            <MudTextFieldString HelperText="Insert SQL query result, including headers, here" Label="raw data" Variant="Variant.Outlined" @bind-Value="rawData" Lines="6" />
+            <MudTextField  HelperText="Insert SQL query result, including headers, here" Label="raw data" Variant="Variant.Outlined" @bind-Value="rawData" Lines="6" />
         </MudItem>
         <MudItem>
             <MudButton StartIcon="@Icons.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">Test data</MudButton>
@@ -23,7 +23,7 @@
             <CopyToClipboardButton Copy="@sqlQuery" />
         </MudItem>
         <MudItem xs="2">
-            <MudTextFieldString @bind-Text="tableName" Label="table name"></MudTextFieldString>
+            <MudTextField @bind-Value="tableName" Label="table name" />
         </MudItem>
 
         @if (tableData.Count > 0)
