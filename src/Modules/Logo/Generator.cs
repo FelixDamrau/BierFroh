@@ -45,9 +45,9 @@ public class Generator
             new HsvData(hue, saturation, brightness),
             new HsvData(hue, saturation, brightness - 0.4f*shade),
             new HsvData(hue, saturation, brightness - shade),
-            new HsvData(Mod(hue + hueRotation, 360), saturation, brightness),
-            new HsvData(Mod(hue + hueRotation, 360), saturation, brightness - 0.4f*shade),
-            new HsvData(Mod(hue + hueRotation, 360), saturation, brightness - shade),
+            new HsvData(rotatedHue, saturation, brightness),
+            new HsvData(rotatedHue, saturation, brightness - 0.4f*shade),
+            new HsvData(rotatedHue, saturation, brightness - shade),
         };
     }
 
@@ -76,5 +76,5 @@ public class Generator
         }
     }
 
-    private float Mod(float x, float y) => (x %= y) < 0 ? x + y : x;
+    private static float Mod(float x, float y) => (x %= y) < 0 ? x + y : x;
 }
