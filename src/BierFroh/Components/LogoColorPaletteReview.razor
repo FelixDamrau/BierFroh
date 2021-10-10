@@ -1,0 +1,44 @@
+﻿@using BierFroh.Model
+@if (Palette is not null)
+{
+    <table>
+        <tr>
+            <td>
+                <div class="mud-picker-color-dot mud-picker-color-dot-current mud-ripple">
+                    <div class="mud-picker-color-fill" style="background: @Palette.Color1;"></div>
+                </div>
+            </td>
+            <td>
+                <div class="mud-picker-color-dot mud-picker-color-dot-current mud-ripple">
+                    <div class="mud-picker-color-fill" style="background: @Palette.Color2;"></div>
+                </div>
+            </td>
+            <td>
+                <div class="mud-picker-color-dot mud-picker-color-dot-current mud-ripple">
+                    <div class="mud-picker-color-fill" style="background: @Palette.Color3;"></div>
+                </div>
+            </td>
+            <td>
+                <div class="mud-picker-color-dot mud-picker-color-dot-current mud-ripple">
+                    <div class="mud-picker-color-fill" style="background: @Palette.Color4;"></div>
+                </div>
+            </td>
+            <td>
+                <div class="mud-picker-color-dot mud-picker-color-dot-current mud-ripple">
+                    <div class="mud-picker-color-fill" style="background: @Palette.Color5;"></div>
+                </div>
+            </td>
+            <td>
+                <div class="mud-picker-color-dot mud-picker-color-dot-current mud-ripple">
+                    <div class="mud-picker-color-fill" style="background: @Palette.Color6;"></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public LogoColorPalette? Palette { get; set; }
+}

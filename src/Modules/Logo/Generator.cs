@@ -8,18 +8,12 @@ using SixLabors.ImageSharp.Processing;
 namespace BierFroh.Modules.Logo;
 public class Generator
 {
-    private readonly IReadOnlyList<Color> palette;
-    private readonly float hue;
     private readonly Random random = new();
 
-    public Generator(float hue)
+    public string Create(float hue, float hueRotation, float shade)
     {
-        this.hue = hue;
-        palette =  CreatePalette();
-    }
+        var palette = CreatePalette(hue, hueRotation, shade);
 
-    public string Create()
-    {
         using var memoryStream = new MemoryStream();
         using var image = new Image<Rgba32>(128, 128);
         image.Mutate(x => x.BackgroundColor(Color.Black));
@@ -32,7 +26,8 @@ public class Generator
             {
                 var x = (column + 1) * borderSize + column * squareSize;
                 var y = (row + 1) * borderSize + row * squareSize;
-                AddSquare(image, squareSize, x, y);
+                var square = new Rectangle(x, y, squareSize, squareSize);
+                DrawSquare(image, square, GetRandomPaletteColor(palette));
             }
         }
 
@@ -40,32 +35,38 @@ public class Generator
         return "data:image/png;base64, " + Convert.ToBase64String(memoryStream.ToArray());
     }
 
-    private void AddSquare(Image<Rgba32> image, int size, int x, int y)
+    public IReadOnlyList<HsvData> GetPaletteColors(float hue, float hueRotation, float shade)
     {
-        var square = new Rectangle(x, y, size, size);
-        image.Mutate(i => i.Fill(GetRandomTintedColor(), square));
+        var saturation = 1;
+        var brightness = 1;
+        var rotatedHue = Mod(hue + hueRotation, 360);
+        return new[]
+        {
+            new HsvData(hue, saturation, brightness),
+            new HsvData(hue, saturation, brightness - 0.4f*shade),
+            new HsvData(hue, saturation, brightness - shade),
+            new HsvData(rotatedHue, saturation, brightness),
+            new HsvData(rotatedHue, saturation, brightness - 0.4f*shade),
+            new HsvData(rotatedHue, saturation, brightness - shade),
+        };
     }
 
-    private Color GetRandomTintedColor()
+    private static void DrawSquare(Image<Rgba32> image, Rectangle square, Color fillColor) => image.Mutate(i => i.Fill(fillColor, square));
+
+    private Color GetRandomPaletteColor(IReadOnlyList<Color> palette)
     {
         var rnd = random.Next(0, palette.Count);
         return palette[rnd];
     }
 
-    private IReadOnlyList<Color> CreatePalette()
+    private IReadOnlyList<Color> CreatePalette(float hue, float hueRotation, float shade)
     {
-        var saturation = 1;
-        var brightness = 1;
         var converter = new ColorSpaceConverter();
-        return new[]
-        {
-            GetRgb32(new Hsv(hue, saturation, brightness)),
-            GetRgb32(new Hsv(hue, saturation, brightness - 0.25f)),
-            GetRgb32(new Hsv(hue, saturation, brightness - 0.55f)),
-            GetRgb32(new Hsv(hue - 25, saturation, brightness)),
-            GetRgb32(new Hsv(hue - 25, saturation, brightness - 0.25f)),
-            GetRgb32(new Hsv(hue - 25, saturation, brightness - 0.55f)),
-        };
+        var colors = GetPaletteColors(hue, hueRotation, shade);
+        return colors
+            .Select(c => new Hsv(c.Hue, c.Saturation, c.Brightness))
+            .Select(c => GetRgb32(c))
+            .ToList();
 
         Color GetRgb32(Hsv hsv)
         {
@@ -74,4 +75,6 @@ public class Generator
             return new Color(rgba32);
         }
     }
+
+    private static float Mod(float x, float y) => (x %= y) < 0 ? x + y : x;
 }
