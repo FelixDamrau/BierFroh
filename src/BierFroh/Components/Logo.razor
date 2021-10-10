@@ -1,43 +1,91 @@
-﻿@using BierFroh.Modules.Logo
+﻿@using BierFroh.Model
+@using BierFroh.Modules.Logo
 @using MudBlazor.Utilities
 
 <MudGrid>
-    <MudItem md="4" Class="d-flex align-center justify-center py-8">
-        <MudColorPicker DisableAlpha=true
-                        DisableColorField=true
-                        DisableInputs=true
-                        DisableToolbar=true
-                        DisableModeSwitch=true
-                        ColorPickerMode=ColorPickerMode.HSL
-                        PickerVariant="PickerVariant.Static"
-                        ValueChanged="UpdateSelectedColor"
-                        Value="value" />
+    <MudItem xs="12" lg="8" Class="d-flex align-center justify-center py-2">
+        <MudGrid>
+            <MudItem xs="12" lg="6" Class="d-flex align-center justify-center py-2">
+                <MudColorPicker DisableAlpha=true
+                                DisableColorField=true
+                                DisableInputs=true
+                                DisableToolbar=true
+                                DisableModeSwitch=true
+                                DisablePreview=true
+                                ColorPickerMode=ColorPickerMode.HSL
+                                PickerVariant="PickerVariant.Static"
+                                Value="value"
+                                ValueChanged="HueChanged" />
+            </MudItem>
+            <MudItem xs="12" lg="6" Class="d-flex align-left justify-center py-2">
+                <LogoColorPaletteReview Palette=palette />
+            </MudItem>
+            <MudItem xs="12" lg="6" Class="d-flex align-left justify-center py-2">
+                <MudSlider T="float" Min=-180 Max=180 Value="hueRotation" ValueChanged="RotationChanged">Hue-Rotation: @hueRotation</MudSlider>
+            </MudItem>
+            <MudItem xs="12" lg="6" Class="d-flex align-left justify-center py-2">
+                <MudSlider T="float" Min=0 Max=1 Step=0.01f Value="shade" ValueChanged="ShadeChanged">Shade: @((shade*100).ToString("0"))</MudSlider>
+            </MudItem>
+        </MudGrid>
     </MudItem>
-    <MudItem md="4" Class="d-flex align-left justify-center py-8">
+    <MudItem xs="12" lg="2" Class="d-flex align-center justify-center py-2">
         @if (image64 is not null)
         {
             <img src=@image64 />
         }
     </MudItem>
+    <MudItem xs="12" Class="d-flex align-left justify-center py-2">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Create">Create Logo</MudButton>
+    </MudItem>
 </MudGrid>
 
 @code {
     private string? image64;
-    private Generator? generator = new Generator(303f);
+    private Generator generator = new Generator();
     private MudColor value = new MudColor(303.0, 1.0, 0.5, 1.0);
+    private LogoColorPalette? palette;
+    private float hue => (float)value.H;
+    private float hueRotation = -25;
+    private float shade = 0.55f;
 
-    public void Create()
+    protected override void OnInitialized()
     {
-        if (generator is not null)
-        {
-            image64 = generator.Create();
-            StateHasChanged();
-        }
+        ColorsChanged();
+        base.OnInitialized();
     }
 
-    public void UpdateSelectedColor(MudColor mudColor)
+    private void Create()
+    {
+        image64 = generator.Create(hue, hueRotation, shade);
+        //StateHasChanged();
+    }
+
+
+    public void ColorsChanged()
+    {
+        var colors = generator
+        .GetPaletteColors(hue, hueRotation, shade)
+        .Select(hsv => ColorConverter.ToRgb(hsv))
+        .Select(rgb => ColorConverter.ToCss(rgb))
+        .ToList();
+        palette = new(colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]);
+    }
+
+    private void HueChanged(MudColor mudColor)
     {
         value = mudColor;
-        generator = new Generator((float)mudColor.H);
+        ColorsChanged();
+    }
+
+    private void RotationChanged(float rotation)
+    {
+        hueRotation = rotation;
+        ColorsChanged();
+    }
+
+    private void ShadeChanged(float shade)
+    {
+        this.shade = shade;
+        ColorsChanged();
     }
 }
