@@ -1,0 +1,12 @@
+﻿@using BierFroh.Model
+<MudCard Width="400px">
+    <MudCardContent>
+        <MudText Typo="Typo.body2">@Node.Title</MudText>
+    </MudCardContent>
+</MudCard>
+
+@code{
+    [Parameter]
+    [EditorRequired]
+    public Dependency Node { get; set; }
+}
