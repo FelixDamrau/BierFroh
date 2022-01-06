@@ -1,11 +1,25 @@
 ﻿@using BierFroh.Model
-<MudCard Width="400px">
+<MudCard Width="200px" Outlined="true">
     <MudCardContent>
-        <MudText Typo="Typo.body2">@Node.Title</MudText>
+        <ErrorBoundary>
+            <ChildContent>
+                <MudGrid>
+                    <MudItem xs=12>
+                        <MudText Style="word-wrap: break-word;" Typo="Typo.body2">@Node.Title</MudText>
+                    </MudItem>
+                    <MudItem xs=12>
+                        <MudChip Color="Color.Primary" Size="Size.Small">@Node.Version</MudChip>
+                    </MudItem>
+                </MudGrid>
+            </ChildContent>
+            <ErrorContent>
+                <MudText Color="Color.Error">Error in graph Node</MudText>
+            </ErrorContent>
+        </ErrorBoundary>
     </MudCardContent>
 </MudCard>
 
-@code{
+@code {
     [Parameter]
     [EditorRequired]
     public Dependency Node { get; set; }

@@ -29,7 +29,7 @@
 
 @code {
     private const long maxFileSize = 1024 * 1024 * 11; //11MB
-    private Diagram? diagram;
+    private Diagram? diagram = new Diagram();
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
@@ -40,20 +40,27 @@
         var projectAssets = ProjectAssetsDeserializer.Deserialize(json);
         var graph = new DependencyGraph().GetDirectedGraph(projectAssets);
 
-        diagram.Nodes.Add(new Dependency(new Point(10, 10)));
+        var rootNode = new Dependency(new Point(10, 10));
+        rootNode.Title = projectAssets.ProjectName;
+        rootNode.Version = projectAssets.Version;
+        diagram.Nodes.Add(rootNode);
         var x = 10;
         foreach (var dep in graph.Vertices.Skip(1))
         {
-            var nodeModel = new Dependency(new Point(x += 30, 30));
-            nodeModel.Title = dep.Value.Name;
-            diagram.Nodes.Add(nodeModel);
+            var dependencyNode = new Dependency(new Point(x += 30, 30));
+            dependencyNode.Title = dep.Value.Name;
+            dependencyNode.Version = dep.Value.Version;
+            diagram.Nodes.Add(dependencyNode);
+            var link = new LinkModel(rootNode, dependencyNode);
+            link.TargetMarker = LinkMarker.Arrow;
+            link.PathGenerator = PathGenerators.Straight;
+            diagram.Links.Add(link);
         }
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        diagram = new Diagram();
         diagram.RegisterModelComponent<Dependency, DependencyNode>();
     }
 }

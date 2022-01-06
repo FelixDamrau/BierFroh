@@ -2,6 +2,7 @@
 
 public interface IProjectAssets
 {
-    public string ProjectName { get; }
+    string ProjectName { get; }
+    string Version { get; }
     IReadOnlyList<IDependency> Dependencies { get; }
 }
