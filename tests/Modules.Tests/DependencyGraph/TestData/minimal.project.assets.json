@@ -1,0 +1,18 @@
+{
+  "project": {
+    "restore": {
+      "projectName": "This is a project name"
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "Develix.Essentials": {
+            "target": "Package",
+            "version": "[1.0.0-alpha003, )"
+          }
+        }
+      }
+    }
+  }
+}

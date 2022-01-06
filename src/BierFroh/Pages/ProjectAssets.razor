@@ -1,0 +1,26 @@
+﻿@page "/projectassets"
+
+@using BierFroh.Modules.DependencyGraph;
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">Project Assets Graph</MudText>
+    <InputFile id="fileInput" OnChange="OnInputFileChange" hidden accept=".json" />
+    <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.UploadFile" for="fileInput">assets.json laden</MudButton>
+</MudContainer>
+
+@code{
+    private const long maxFileSize = 1024 * 1024 * 11; //11MB
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var selectedFile = e.GetMultipleFiles().Single();
+        using var stream = selectedFile.OpenReadStream(maxFileSize);
+        using var reader = new StreamReader(stream);
+        var json = reader.ReadToEnd();
+        var projectAssets = ProjectAssetsDeserializer.Deserialize(json);
+        var graph = new DependencyGraph().GetDirectedGraph(projectAssets);
+
+    }
+
+
+}
