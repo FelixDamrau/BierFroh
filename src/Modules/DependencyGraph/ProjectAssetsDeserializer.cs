@@ -5,10 +5,10 @@ namespace BierFroh.Modules.DependencyGraph
 {
     public class ProjectAssetsDeserializer
     {
-        public static IProjectAssets Deserialize(string jsonText)
+        public static async Task<IProjectAssets> DeserializeAsync(Stream stream)
         {
             var projectAssets = new ProjectAssets();
-            var jsonDocument = JsonDocument.Parse(jsonText);
+            var jsonDocument = await JsonDocument.ParseAsync(stream).ConfigureAwait(false);
             var projectNode = jsonDocument.RootElement.GetProperty("project");
 
             projectAssets.ProjectName = GetProjectName(projectNode);

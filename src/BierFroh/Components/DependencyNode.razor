@@ -1,14 +1,15 @@
 ﻿@using BierFroh.Model
-<MudCard Width="200px" Outlined="true">
+
+<MudCard Style="max-width: 150px" Outlined="true">
     <MudCardContent>
         <ErrorBoundary>
             <ChildContent>
                 <MudGrid>
-                    <MudItem xs=12>
-                        <MudText Style="word-wrap: break-word;" Typo="Typo.body2">@Node.Title</MudText>
+                    <MudItem xs=12 Style="padding: 1px">
+                        <MudText Style="word-wrap: break-word" Typo="Typo.body2">@Node.Title</MudText>
                     </MudItem>
-                    <MudItem xs=12>
-                        <MudChip Color="Color.Primary" Size="Size.Small">@Node.Version</MudChip>
+                    <MudItem xs=6 Style="padding: 0px">
+                        <MudChip Style="padding:3px; font-size: 10px; height:17px; border-radius: 6px" Size="Size.Small" Color="Color.Primary">@Node.Version</MudChip>
                     </MudItem>
                 </MudGrid>
             </ChildContent>

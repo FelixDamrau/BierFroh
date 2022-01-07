@@ -5,20 +5,26 @@ namespace BierFroh.Modules.Tests.DependencyGraph;
 public class TestDataProviderTests
 {
     [Fact]
-    public void GetEmbeddedResources()
+    public void GetEmbeddedResourceStreams()
     {
-        var resources = TestDataProvider.Get();
+        var resourceStreams = TestDataProvider.Get();
 
-        Assert.Equal(1, resources.Count);
+        Assert.Equal(1, resourceStreams.Count());
+        DisposeAll(resourceStreams);
     }
 
     [Fact]
-    public async void ResourcesAreNonEmpty()
+    public void ResourceStreamsAreNonEmpty()
     {
-        var resources = TestDataProvider.Get();
-        
-        var readResources = await Task.WhenAll(resources);
+        var resourceStreams = TestDataProvider.Get();
 
-        Assert.All(readResources, (r) => Assert.True(!string.IsNullOrWhiteSpace(r)));
+        Assert.All(resourceStreams, (r) => Assert.True(r.Length > 0));
+        DisposeAll(resourceStreams);
+    }
+
+    private static void DisposeAll(IEnumerable<IDisposable> disposables)
+    {
+        foreach (var disposable in disposables)
+            disposable.Dispose();
     }
 }
