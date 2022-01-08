@@ -1,4 +1,17 @@
 {
+  "targets": {
+    "net6.0": {
+      "Microsoft.Extensions.Primitives/6.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+        "type": "package"
+      }
+    }
+  },
   "project": {
     "version": "1.0.0",
     "restore": {

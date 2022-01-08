@@ -11,12 +11,9 @@
                     <MudItem xs=6 Style="padding: 0px">
                         <MudChip Style="padding:3px; font-size: 10px; height:17px; border-radius: 6px" Size="Size.Small" Color="Color.Primary">@Node.Version</MudChip>
                     </MudItem>
-                    @foreach (var framework in Node.Frameworks)
-                    {
-                        <MudItem xs=6 Style="padding: 0px">
-                            <MudChip Style="padding:3px; font-size: 10px; height:17px; border-radius: 6px" Size="Size.Small" Color="Color.Secondary">@framework</MudChip>
-                        </MudItem>
-                    }
+                    <MudItem xs=6 Style="padding: 0px">
+                        <MudChip Style="padding:3px; font-size: 10px; height:17px; border-radius: 6px" Size="Size.Small" Color="Color.Secondary">@Node.Framework</MudChip>
+                    </MudItem>
                 </MudGrid>
             </ChildContent>
             <ErrorContent>
