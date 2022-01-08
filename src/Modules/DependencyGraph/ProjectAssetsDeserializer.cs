@@ -13,6 +13,7 @@ namespace BierFroh.Modules.DependencyGraph
 
             projectAssets.ProjectName = GetProjectName(projectNode);
             projectAssets.Version = GetVersion(projectNode);
+            projectAssets.Frameworks = GetFrameworks(projectNode);
             projectAssets.Dependencies = GetDependencies(projectNode);
 
             return projectAssets;
@@ -32,6 +33,16 @@ namespace BierFroh.Modules.DependencyGraph
             return projectNode
                 .GetProperty("version")
                 .GetString() ?? throw new Exception();
+        }
+
+        private static HashSet<string> GetFrameworks(JsonElement projectNode)
+        {
+            var frameworks = projectNode.GetProperty("frameworks").EnumerateObject();
+            var deserializedFrameworks = new HashSet<string>();
+            foreach (var framework in frameworks)
+                deserializedFrameworks.Add(framework.Name);
+
+            return deserializedFrameworks;
         }
 
         private static List<Dependency> GetDependencies(JsonElement projectNode)

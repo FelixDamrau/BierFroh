@@ -18,7 +18,7 @@ partial class ProjectAssets
     {
         var selectedFile = e.GetMultipleFiles().Single();
         var projectAssets = await GetProjectAssets(selectedFile);
-        var graph = new DependencyGraph().GetDirectedGraph(projectAssets);
+        var graph = DependencyGraph.Create(projectAssets);
         UpdateDiagram(graph);
     }
 
@@ -28,6 +28,7 @@ partial class ProjectAssets
         var rootNode = new Dependency(new Point(0, 0))
         {
             Title = projectNode.Value.Name,
+            Frameworks = projectNode.Value.Frameworks,
             Version = projectNode.Value.Version,
         };
         diagram.Nodes.Add(rootNode);
