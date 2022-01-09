@@ -19,11 +19,10 @@ partial class ProjectAssets
     {
         var selectedFile = e.GetMultipleFiles().Single();
         var projectAssets = await GetProjectAssets(selectedFile);
-        var graph = DependencyGraph.Create(projectAssets);
-        diagram.SuspendRefresh = true;
+        var framework = projectAssets.Frameworks.First();
+        var graph = DependencyGraph.Create(projectAssets, framework);
         ClearDiagram();
         UpdateDiagram(graph);
-        diagram.SuspendRefresh = false;
     }
 
     private static async Task<IProjectAssets> GetProjectAssets(IBrowserFile selectedFile)
