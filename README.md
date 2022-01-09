@@ -8,10 +8,13 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## See you
 
-ヾ(￣▽￣) Bye~Bye~
+ヾ(￣▽￣) Bye~Bye
 
 ## Versions
 
+* 1.2.0
+  * Add project assets page
+  * Parse project.assets.json and show its dependency graph
 * 1.1.1
   * Add custom hue rotation and shade options
   * Adjust layout breakpoints
