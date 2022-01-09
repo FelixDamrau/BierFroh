@@ -7,6 +7,7 @@ using Blazor.Diagrams.Core.Geometry;
 using Develix.Essentials.Core;
 using GraphShape.Algorithms.Layout;
 using Microsoft.AspNetCore.Components.Forms;
+using QuikGraph;
 
 namespace BierFroh.Pages;
 
@@ -23,6 +24,12 @@ partial class ProjectAssets
         ClearDiagram();
         UpdateDiagram(graph);
         diagram.SuspendRefresh = false;
+    }
+
+    private static async Task<IProjectAssets> GetProjectAssets(IBrowserFile selectedFile)
+    {
+        using var stream = selectedFile.OpenReadStream();
+        return await ProjectAssetsDeserializer.DeserializeAsync(stream);
     }
 
     private void ClearDiagram()
@@ -47,42 +54,6 @@ partial class ProjectAssets
         SetupLayout();
     }
 
-    private void SetupLayout()
-    {
-        var qGraph = new QuikGraph.BidirectionalGraph<Dependency, QuikGraph.Edge<Dependency>>();
-        var nodes = diagram.Nodes.OfType<Dependency>().ToList();
-        var edges = diagram.Links.OfType<DependencyLink>().Select(lm => new QuikGraph.Edge<Dependency>(lm.SourceNode, lm.TargetNode)).ToList();
-        qGraph.AddVertexRange(nodes);
-        qGraph.AddEdgeRange(edges);
-
-        var positions = nodes.ToDictionary(nm => nm, dn => new GraphShape.Point(dn.Position.X, dn.Position.Y));
-        var sizes = nodes.ToDictionary(nm => nm, dn => new GraphShape.Size(dn.Size?.Width ?? 100, dn.Size?.Height ?? 100));
-        var layoutCtx = new LayoutContext<Dependency, QuikGraph.Edge<Dependency>, QuikGraph.BidirectionalGraph<Dependency, QuikGraph.Edge<Dependency>>>(qGraph, positions, sizes, LayoutMode.Simple);
-        var algoFact = new StandardLayoutAlgorithmFactory<Dependency, QuikGraph.Edge<Dependency>, QuikGraph.BidirectionalGraph<Dependency, QuikGraph.Edge<Dependency>>>();
-        var algo = algoFact.CreateAlgorithm("Tree", layoutCtx, new SimpleTreeLayoutParameters()
-        {
-            Direction = LayoutDirection.LeftToRight,
-            SpanningTreeGeneration = SpanningTreeGeneration.DFS,
-            LayerGap = 100,
-            VertexGap = 25,
-        });
-
-        algo.Compute();
-
-        try
-        {
-            diagram.SuspendRefresh = true;
-            foreach (var vertPos in algo.VerticesPositions)
-            {
-                vertPos.Key.SetPosition(vertPos.Value.X, vertPos.Value.Y);
-            }
-        }
-        finally
-        {
-            diagram.SuspendRefresh = false;
-        }
-    }
-
     private Dependency AddDiagramNode(GraphNode graphNode, Dictionary<GraphNode, Dependency> cache)
     {
         if (cache.TryGetValue(graphNode, out var dependecy))
@@ -99,10 +70,54 @@ partial class ProjectAssets
         return addedDependency;
     }
 
-    private static async Task<IProjectAssets> GetProjectAssets(IBrowserFile selectedFile)
+    private void SetupLayout()
     {
-        using var stream = selectedFile.OpenReadStream();
-        return await ProjectAssetsDeserializer.DeserializeAsync(stream);
+        var qGraph = new BidirectionalGraph<Dependency, Edge<Dependency>>();
+        var nodes = diagram.Nodes.OfType<Dependency>().ToList();
+        var edges = diagram.Links.OfType<DependencyLink>().Select(lm => new Edge<Dependency>(lm.SourceNode, lm.TargetNode)).ToList();
+        qGraph.AddVertexRange(nodes);
+        qGraph.AddEdgeRange(edges);
+
+        var positions = nodes.ToDictionary(nm => nm, dn => new GraphShape.Point(dn.Position.X, dn.Position.Y));
+        var sizes = nodes.ToDictionary(nm => nm, dn => new GraphShape.Size(dn.Size?.Width ?? 100, dn.Size?.Height ?? 100));
+
+        var algorithm = CreateLayoutAlgorithm(qGraph, positions, sizes);
+        algorithm.Compute();
+        UpdatePositions(algorithm);
+    }
+
+    private static ILayoutAlgorithm<Dependency, Edge<Dependency>, BidirectionalGraph<Dependency, Edge<Dependency>>> CreateLayoutAlgorithm(
+        BidirectionalGraph<Dependency, Edge<Dependency>> qGraph,
+        IDictionary<Dependency, GraphShape.Point> positions,
+        IDictionary<Dependency, GraphShape.Size> sizes)
+    {
+        var layoutContext = new LayoutContext<Dependency, Edge<Dependency>, BidirectionalGraph<Dependency, Edge<Dependency>>>(qGraph, positions, sizes, LayoutMode.Simple);
+        var algorithmFactory = new StandardLayoutAlgorithmFactory<Dependency, Edge<Dependency>, BidirectionalGraph<Dependency, Edge<Dependency>>>();
+        var layoutParameters = new SimpleTreeLayoutParameters()
+        {
+            Direction = LayoutDirection.LeftToRight,
+            SpanningTreeGeneration = SpanningTreeGeneration.DFS,
+            LayerGap = 100,
+            VertexGap = 25,
+        };
+        var algorithm = algorithmFactory.CreateAlgorithm("Tree", layoutContext, layoutParameters);
+        return algorithm;
+    }
+
+    private void UpdatePositions(ILayoutAlgorithm<Dependency, Edge<Dependency>, BidirectionalGraph<Dependency, Edge<Dependency>>> algorithm)
+    {
+        try
+        {
+            diagram.SuspendRefresh = true;
+            foreach (var vertPos in algorithm.VerticesPositions)
+            {
+                vertPos.Key.SetPosition(vertPos.Value.X, vertPos.Value.Y);
+            }
+        }
+        finally
+        {
+            diagram.SuspendRefresh = false;
+        }
     }
 
     protected override void OnInitialized()
