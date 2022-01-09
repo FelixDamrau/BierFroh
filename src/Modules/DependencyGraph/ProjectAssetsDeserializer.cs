@@ -1,10 +1,12 @@
 ﻿using System.Text.Json;
+using System.Text.RegularExpressions;
 using BierFroh.Modules.DependencyGraph.Model;
 
 namespace BierFroh.Modules.DependencyGraph
 {
     public class ProjectAssetsDeserializer
     {
+        private static readonly Regex matchVersionRegex = new(@"[\d+\.]+");
         public static async Task<IProjectAssets> DeserializeAsync(Stream stream)
         {
             var projectAssets = new ProjectAssets();
@@ -55,14 +57,26 @@ namespace BierFroh.Modules.DependencyGraph
                 var dependencies = framework.Value.GetProperty("dependencies").EnumerateObject();
                 foreach (var dependency in dependencies)
                 {
+                    var rawVersion = dependency.Value.GetProperty("version").GetString()
+                        ?? throw new InvalidOperationException($"The version of the dependency '{dependency.Name}' is not set!");
+                    var version = ParseVersion(rawVersion);
                     var addedDependecy = projectAssets.DependencyCollection.Add(
                         dependency.Name,
                         framework.Name,
-                        dependency.Value.GetProperty("version").GetString()
-                            ?? throw new InvalidOperationException($"The version of the dependency '{dependency.Name}' is not set!"));
+                        version);
                     var projectDependency = projectAssets.DependencyCollection.Add(projectAssets.ProjectName, projectAssets.Frameworks.First(), projectAssets.Version);
                     projectAssets.DependencyCollection.AddDependency(projectDependency, addedDependecy);
                 }
+            }
+
+
+            static string ParseVersion(string rawVersion)
+            {
+                if (char.IsDigit(rawVersion.First())) // This is a workaround to correctly parse alpha versions
+                    return rawVersion;
+
+                var match = matchVersionRegex.Match(rawVersion);
+                return match.Success ? match.Groups[0].Value : rawVersion;
             }
         }
 
