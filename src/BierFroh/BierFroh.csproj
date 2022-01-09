@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Develix.Essentials" Version="1.*-*" />
+    <PackageReference Include="Develix.Essentials" Version="1.0.0" />
+    <PackageReference Include="GraphShape" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" Version="6.0.2" />
+    <PackageReference Include="Z.Blazor.Diagrams" Version="2.1.6" />
   </ItemGroup>
 
   <ItemGroup>

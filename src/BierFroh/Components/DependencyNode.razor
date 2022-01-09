@@ -1,0 +1,31 @@
+﻿@using BierFroh.Model
+@using BierFroh.Model.ProjectAssets
+
+<MudCard Style="max-width: 150px" Outlined="true">
+    <MudCardContent>
+        <ErrorBoundary>
+            <ChildContent>
+                <MudGrid>
+                    <MudItem xs=12 Style="padding: 1px">
+                        <MudText Style="word-wrap: break-word" Typo="Typo.body2">@Node.Title</MudText>
+                    </MudItem>
+                    <MudItem xs=6 Style="padding: 0px">
+                        <MudChip Style="padding:3px; font-size: 10px; height:17px; border-radius: 6px" Size="Size.Small" Color="Color.Primary">@Node.Version</MudChip>
+                    </MudItem>
+                    <MudItem xs=6 Style="padding: 0px">
+                        <MudChip Style="padding:3px; font-size: 10px; height:17px; border-radius: 6px" Size="Size.Small" Color="Color.Secondary">@Node.Framework</MudChip>
+                    </MudItem>
+                </MudGrid>
+            </ChildContent>
+            <ErrorContent>
+                <MudText Color="Color.Error">Error in graph Node</MudText>
+            </ErrorContent>
+        </ErrorBoundary>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public Dependency Node { get; set; }
+}

@@ -1,0 +1,32 @@
+{
+  "targets": {
+    "net6.0": {
+      "Microsoft.Extensions.Primitives/6.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+        "type": "package"
+      }
+    }
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectName": "This is a project name"
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "Develix.Essentials": {
+            "target": "Package",
+            "version": "[1.0.0-alpha003, )"
+          }
+        }
+      }
+    }
+  }
+}

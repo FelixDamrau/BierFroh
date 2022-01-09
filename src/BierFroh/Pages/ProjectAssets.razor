@@ -1,0 +1,30 @@
+﻿@page "/projectassets"
+
+@using BierFroh.Components
+@using BierFroh.Model
+@using BierFroh.Modules.DependencyGraph
+@using Blazor.Diagrams
+@using Blazor.Diagrams.Core
+@using Blazor.Diagrams.Core.Geometry
+@using Blazor.Diagrams.Core.Models
+@using Blazor.Diagrams.Components
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">Project Assets Graph</MudText>
+    <MudText Typo="Typo.body1">This is still in a test phase. Expect crashes... 🐱‍👓</MudText>
+    <MudText Typo="Typo.body1">If multiple frameworks are found, only the first one will be rendered.</MudText>
+    <InputFile id="fileInput" OnChange="OnInputFileChange" hidden accept=".json" />
+    <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.UploadFile" for="fileInput">assets.json laden</MudButton>
+
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Class="pa-16 ma-2">
+                <div style="width:70vw; height: 50vh">
+                    <CascadingValue Value="diagram">
+                        <DiagramCanvas></DiagramCanvas>
+                    </CascadingValue>
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
