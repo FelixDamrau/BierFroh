@@ -9,7 +9,7 @@ public class TestDataProviderTests
     {
         var resourceStreams = TestDataProvider.Get();
 
-        Assert.Equal(1, resourceStreams.Count());
+        Assert.Equal(2, resourceStreams.Count());
         DisposeAll(resourceStreams);
     }
 
