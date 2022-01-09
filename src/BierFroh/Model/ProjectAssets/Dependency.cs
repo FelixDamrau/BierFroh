@@ -1,7 +1,7 @@
 ﻿using Blazor.Diagrams.Core.Geometry;
 using Blazor.Diagrams.Core.Models;
 
-namespace BierFroh.Model;
+namespace BierFroh.Model.ProjectAssets;
 public class Dependency : NodeModel
 {
     public string? Version { get; set; }
