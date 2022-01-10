@@ -9,8 +9,9 @@ public class DependencyLink : LinkModel
     {
         SourceNode = sourceNode;
         TargetNode = targetNode;
+        SourceMarker = LinkMarker.Circle;
         TargetMarker = LinkMarker.Arrow;
-        PathGenerator = PathGenerators.Straight;
+        PathGenerator = PathGenerators.Smooth;
     }
 
     public new Dependency SourceNode { get; }

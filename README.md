@@ -12,6 +12,9 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## Versions
 
+* 1.2.1
+  * Polish projects assets page
+  * Allow upload of assets files up to 5MB
 * 1.2.0
   * Add project assets page
   * Parse project.assets.json and show its dependency graph
