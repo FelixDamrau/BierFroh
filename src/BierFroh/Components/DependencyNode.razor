@@ -1,7 +1,7 @@
 ﻿@using BierFroh.Model
 @using BierFroh.Model.ProjectAssets
 
-<MudCard Style="max-width: 150px" Outlined="true">
+<MudCard Style="@GetCardStyle()" Outlined="true">
     <MudCardContent>
         <ErrorBoundary>
             <ChildContent>
@@ -28,4 +28,11 @@
     [Parameter]
     [EditorRequired]
     public Dependency Node { get; set; }
+
+    public string GetCardStyle()
+    {
+        if (Node.Selected)
+            return "max-width:150px; border: 2px solid; background-color: var(--mud-palette-info-lighten)";
+        return "max-width:150px";
+    }
 }
