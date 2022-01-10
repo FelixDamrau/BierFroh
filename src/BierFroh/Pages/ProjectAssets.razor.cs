@@ -13,6 +13,7 @@ namespace BierFroh.Pages;
 
 partial class ProjectAssets
 {
+    private const long maxFileSize = 1024 * 1024 * 5; // 5MB
     private readonly Diagram diagram = new();
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
@@ -27,7 +28,7 @@ partial class ProjectAssets
 
     private static async Task<IProjectAssets> GetProjectAssets(IBrowserFile selectedFile)
     {
-        using var stream = selectedFile.OpenReadStream();
+        using var stream = selectedFile.OpenReadStream(maxFileSize);
         return await ProjectAssetsDeserializer.DeserializeAsync(stream);
     }
 
