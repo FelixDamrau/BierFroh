@@ -1,7 +1,6 @@
 @inherits LayoutComponentBase
 @inject IJSRuntime jsRuntime
 
-
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -10,9 +9,14 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
         <BierFroh.Components.BierFrohThemeProvider />
-        <MudIconButton Icon="@Icons.Material.Filled.Looks4" Color="Color.Inherit" OnClick="PlaySound" />
+        <MudTooltip Text="GitHub Repo">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/FelixDamrau/BierFroh" Target="_blank" />
+        </MudTooltip>
+        <MudTooltip Text="Nyes">
+            <MudIconButton Icon="@Icons.Material.Filled.Looks4" Color="Color.Inherit" OnClick="PlaySound" />
+        </MudTooltip>
     </MudAppBar>
-    <MudDrawer @bind-Open="drawerOpen" Elevation="1">
+    <MudDrawer @bind-Open="drawerOpen" Elevation="0">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">@nameGenerator.GetAppName()</MudText>
         </MudDrawerHeader>
