@@ -19,30 +19,47 @@
         <MudItem xs="12" md="3" xl="2" Class="d-flex align-center justify-center mud-width-full py-4">
             <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.UploadFile" for="fileInput">assets.json laden</MudButton>
         </MudItem>
-        <MudItem xs="12" md="3" xl="2" Class="d-flex align-center justify-center mud-width-full py-4">
-            @if (projectAssets is not null && projectAssets.Frameworks.Count != 0)
-            {
-                <MudSelect Value="@projectAssets.Frameworks.First()"
-                       T="string"
-                       Dense="true"
-                       Margin="Margin.None"
-                       TextChanged="SelectedFrameworkChanged"
-                       HelperText="Select Framework">
-                    @foreach (var framework in projectAssets.Frameworks)
+        @if (projectAssets is not null)
+        {
+            <MudItem xs="12" md="3" xl="2" Class="d-flex align-center justify-center mud-width-full py-4">
+                @if (projectAssets.Frameworks.Count != 0)
+                {
+                    <MudSelect T="string" Dense="true" Margin="Margin.None" @bind-Value="selectedFramework" HelperText="Select Framework">
+                        @foreach (var framework in projectAssets.Frameworks)
+                        {
+                            <MudSelectItem Value="@framework">@framework</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+                else
+                {
+                    <MudSelect T="string" Disabled=true Label="No file loaded" HelperText="Select Framework" />
+                }
+            </MudItem>
+        }
+        @if (selectedFramework is not null && filterFactory is not null)
+        {
+            <MudItem xs="12" md="3" xl="2" Class="d-flex align-center justify-center mud-width-full py-4">
+                <MudSelect T="string" MultiSelection="true" @bind-SelectedValues="selectedDependencyKeys" HelperText="Select Namespaces">
+                    @foreach (var key in filterFactory.GetKeys().OrderBy(k => k))
                     {
-                        <MudSelectItem Value="@framework">@framework</MudSelectItem>
+                        <MudSelectItem T="string" Value="@key">@key (@filterFactory.Count(key, selectedFramework))</MudSelectItem>
                     }
                 </MudSelect>
-            }
-            else
-            {
-                <MudSelect T="string" Disabled=true Label="No file loaded" HelperText="Select Framework"/>
-            }
-        </MudItem>
+            </MudItem>
+        }
+        @if (selectedFramework is not null && selectedDependencyKeys is not null)
+        {
+            <MudItem xs="12" md="3" xl="2" Class="d-flex align-center justify-center mud-width-full py-4">
+                <MudButton HtmlTag="render" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.Schema" OnClick="RenderDiagram">
+                    Render Graph
+                </MudButton>
+            </MudItem>
+        }
         <MudItem xs="12" Class="d-flex align-center justify-center mud-width-full py-8">
             <div style="width:80vw; height: 60vh">
                 <CascadingValue Value="diagram">
-                    <DiagramCanvas></DiagramCanvas>
+                    <DiagramCanvas />
                 </CascadingValue>
             </div>
         </MudItem>

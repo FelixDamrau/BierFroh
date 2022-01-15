@@ -12,6 +12,11 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## Versions
 
+* 1.2.3
+  * Project assets
+    * Add possibility to filter name spaces
+    * Redo graph creation UI
+    * Graph creation on click
 * 1.2.2
   * Project assets
     * Map sku framework names to SDK style TFM names
