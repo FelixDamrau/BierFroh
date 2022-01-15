@@ -16,32 +16,35 @@ partial class ProjectAssets
     private const long maxFileSize = 1024 * 1024 * 5; // 5MB
     private readonly Diagram diagram = new();
     private IProjectAssets? projectAssets;
+    private string? selectedFramework;
+    private IEnumerable<string>? selectedDependencyKeys;
+    private DependencyFilterFactory? filterFactory;
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         var selectedFile = e.GetMultipleFiles().Single();
         projectAssets = await GetProjectAssets(selectedFile);
-    }
-
-    private void SelectedFrameworkChanged(string selected)
-    {
-        RenderDiagram(selected);
-    }
-
-    private void RenderDiagram(string selectedFramework)
-    {
+        selectedFramework = projectAssets.Frameworks.FirstOrDefault();
+        filterFactory = new DependencyFilterFactory(projectAssets);
+        selectedDependencyKeys = filterFactory.GetKeys();
         ClearDiagram();
-        if (projectAssets is not null)
-        {
-            var graph = DependencyGraph.Create(projectAssets, selectedFramework);
-            UpdateDiagram(graph);
-        }
     }
 
     private static async Task<IProjectAssets> GetProjectAssets(IBrowserFile selectedFile)
     {
         using var stream = selectedFile.OpenReadStream(maxFileSize);
         return await ProjectAssetsDeserializer.DeserializeAsync(stream);
+    }
+
+    private void RenderDiagram()
+    {
+        ClearDiagram();
+        if (projectAssets is not null && filterFactory is not null && selectedDependencyKeys is not null && selectedFramework is not null)
+        {
+            var dependecyFilter = filterFactory.CreateFilter(selectedDependencyKeys);
+            var graph = DependencyGraph.Create(projectAssets, dependecyFilter, selectedFramework);
+            UpdateDiagram(graph);
+        }
     }
 
     private void ClearDiagram()
@@ -52,18 +55,27 @@ partial class ProjectAssets
 
     private void UpdateDiagram(IDirectedGraph<GraphNode> graph)
     {
-        var cache = new Dictionary<GraphNode, Dependency>();
-        foreach (var dep in graph.Vertices)
+        try
         {
-            var dependencyNode = AddDiagramNode(dep.Value, cache);
-            foreach (var successor in dep.Successors)
+            diagram.SuspendRefresh = true;
+            var cache = new Dictionary<GraphNode, Dependency>();
+            foreach (var dep in graph.Vertices)
             {
-                var successorNode = AddDiagramNode(successor.Value, cache);
-                var link = new DependencyLink(dependencyNode, successorNode);
-                diagram.Links.Add(link);
+                var dependencyNode = AddDiagramNode(dep.Value, cache);
+                foreach (var successor in dep.Successors)
+                {
+                    var successorNode = AddDiagramNode(successor.Value, cache);
+                    var link = new DependencyLink(dependencyNode, successorNode);
+                    diagram.Links.Add(link);
+                }
             }
+            SetupLayout();
         }
-        SetupLayout();
+        finally
+        {
+            diagram.SuspendRefresh = false;
+            diagram.Refresh();
+        }
     }
 
     private Dependency AddDiagramNode(GraphNode graphNode, Dictionary<GraphNode, Dependency> cache)
@@ -118,17 +130,9 @@ partial class ProjectAssets
 
     private void UpdatePositions(ILayoutAlgorithm<Dependency, Edge<Dependency>, BidirectionalGraph<Dependency, Edge<Dependency>>> algorithm)
     {
-        try
+        foreach (var vertPos in algorithm.VerticesPositions)
         {
-            diagram.SuspendRefresh = true;
-            foreach (var vertPos in algorithm.VerticesPositions)
-            {
-                vertPos.Key.SetPosition(vertPos.Value.X, vertPos.Value.Y);
-            }
-        }
-        finally
-        {
-            diagram.SuspendRefresh = false;
+            vertPos.Key.SetPosition(vertPos.Value.X, vertPos.Value.Y);
         }
     }
 
