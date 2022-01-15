@@ -15,15 +15,27 @@ partial class ProjectAssets
 {
     private const long maxFileSize = 1024 * 1024 * 5; // 5MB
     private readonly Diagram diagram = new();
+    private IProjectAssets? projectAssets;
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         var selectedFile = e.GetMultipleFiles().Single();
-        var projectAssets = await GetProjectAssets(selectedFile);
-        var framework = projectAssets.Frameworks.First();
-        var graph = DependencyGraph.Create(projectAssets, framework);
+        projectAssets = await GetProjectAssets(selectedFile);
+    }
+
+    private void SelectedFrameworkChanged(string selected)
+    {
+        RenderDiagram(selected);
+    }
+
+    private void RenderDiagram(string selectedFramework)
+    {
         ClearDiagram();
-        UpdateDiagram(graph);
+        if (projectAssets is not null)
+        {
+            var graph = DependencyGraph.Create(projectAssets, selectedFramework);
+            UpdateDiagram(graph);
+        }
     }
 
     private static async Task<IProjectAssets> GetProjectAssets(IBrowserFile selectedFile)
