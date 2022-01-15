@@ -8,8 +8,8 @@
   "resources": {
     "assembly": {
       "AngleSharp.dll": "sha256-fJcyDblaO8\/mJ5RkUdiseQvBvxjmBHPshIgB\/TLinT0=",
-      "BierFroh.dll": "sha256-y33pJ0IuVSRI7I8n0eOAD63Z3NtZCL7\/GXNGXpRU+Uc=",
-      "BierFroh.Modules.dll": "sha256-wFWw09jdFJA8nv08gcTlc6zkMJsF2RJdcp4Vi0tno0g=",
+      "BierFroh.dll": "sha256-oBl3sk3P9XJHi+ev9ESIgiyELWznsmoPjNhLOCViZh8=",
+      "BierFroh.Modules.dll": "sha256-B8rg2On3P1xXHiBWBnlfAdqfGjRWEV4w5JKhekaphVQ=",
       "Blazor.Diagrams.Core.dll": "sha256-iUhtCbSX3sUBmzLVf50V+NYv7rX0PfzNgf1SMF0j\/Pg=",
       "Blazor.Diagrams.dll": "sha256-jau3pMGX5\/olX1NbI0ecsrzhxVx+1uTMkfPuesQmFNc=",
       "Core.dll": "sha256-nizqzMvsI0AA\/TaJi5J13JDa\/wUSwvAyav4Xo\/5mRKg=",
@@ -53,7 +53,7 @@
       "System.Drawing.Primitives.dll": "sha256-Zgutq\/i+nUnGoVeIkiPQ+bvsv2yIy9D1eafFDl2LCAo=",
       "System.IO.Compression.dll": "sha256-jNqhAa4rOUuVPn\/K+JYCPo+L9LjJnLiDjERAqRrCAVA=",
       "System.IO.FileSystem.dll": "sha256-Y5QkiZNypKA7HD79Xaq7XPyFisXYd6NXWU8fXVm3gpk=",
-      "System.Linq.dll": "sha256-oO\/nvhI2C6KHout3h1huw+lQkmBxbsZcCcO8iD1wIRI=",
+      "System.Linq.dll": "sha256-LKigogzpghjvGytwDtfMGjRUOGWo+lp+yDoq\/egoDE8=",
       "System.Linq.Expressions.dll": "sha256-PkRXKh0Yr5eI37pZxHOeXOiVFzP1yWKJetri0Rabh68=",
       "System.Linq.Queryable.dll": "sha256-y3uSxKzFbfGG1Ra6BTmfv3tExKzjGJNo+QULA6vPiBw=",
       "System.Memory.dll": "sha256-7al6sLqYclgTCO1c3Gu59k4cvlzdekpezX5wtYKvW7o=",
