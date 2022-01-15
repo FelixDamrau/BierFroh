@@ -18,7 +18,7 @@ public class DependencyFilterFactory
 
     public IEnumerable<string> GetKeys() => cache.Keys;
 
-    public int Count(string key) => cache.TryGetValue(key, out var keys) ? keys.Count : 0;
+    public int Count(string key, string framework) => cache.TryGetValue(key, out var keys) ? keys.Count(d => d.Framework == framework) : 0;
 
     public DependencyFilter CreateFilter(IEnumerable<string> keys)
     {

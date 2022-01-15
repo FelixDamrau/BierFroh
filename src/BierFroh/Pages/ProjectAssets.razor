@@ -37,13 +37,13 @@
                 }
             </MudItem>
         }
-        @if (filterFactory is not null)
+        @if (selectedFramework is not null && filterFactory is not null)
         {
             <MudItem xs="12" md="3" xl="2" Class="d-flex align-center justify-center mud-width-full py-4">
                 <MudSelect T="string" MultiSelection="true" @bind-SelectedValues="selectedDependencyKeys" HelperText="Select Namespaces">
                     @foreach (var key in filterFactory.GetKeys().OrderBy(k => k))
                     {
-                        <MudSelectItem T="string" Value="@key">@key (@filterFactory.Count(key))</MudSelectItem>
+                        <MudSelectItem T="string" Value="@key">@key (@filterFactory.Count(key, selectedFramework))</MudSelectItem>
                     }
                 </MudSelect>
             </MudItem>
