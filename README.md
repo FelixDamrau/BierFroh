@@ -12,6 +12,11 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## Versions
 
+* 1.2.2
+  * Project assets
+    * Map sku framework names to SDK style TFM names
+    * Allow selection if the to be displayed framework
+  * Add GitHub repository & tooltips in AppBar
 * 1.2.1
   * Polish projects assets page
   * Allow upload of assets files up to 5MB
