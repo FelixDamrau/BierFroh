@@ -44,9 +44,36 @@ namespace BierFroh.Modules.DependencyGraph
             var frameworks = projectNode.GetProperty("frameworks").EnumerateObject();
             var deserializedFrameworks = new HashSet<string>();
             foreach (var framework in frameworks)
-                deserializedFrameworks.Add(framework.Name);
+            {
+                var parsedFramework = ToTfm(framework.Name);
+                deserializedFrameworks.Add(parsedFramework);
+            }
 
             return deserializedFrameworks;
+        }
+
+        /// <summary>
+        /// Converts a stock keeping unit to an SDK style target framework moniker string.
+        /// Can parse all sku ids for .NET Framework 4.0 to 4.8.
+        /// If the <paramref name="sku"/> cannot be parsed to given parameter is returned unchanged.
+        /// </summary>
+        private static string ToTfm(string sku)
+        {
+            return sku switch
+            {
+                ".NETFramework,Version=4.5" => "net45",
+                ".NETFramework,Version=4.5.1" => "net451",
+                ".NETFramework,Version=v4.5.2" => "net452",
+                ".NETFramework,Version=4.6" => "net46",
+                ".NETFramework,Version=4.6.1" => "net461",
+                ".NETFramework,Version=4.6.2" => "net462",
+                ".NETFramework,Version=4.7" => "net47",
+                ".NETFramework,Version=4.7.1" => "net471",
+                ".NETFramework,Version=4.7.2" => "net472",
+                ".NETFramework,Version=4.8" => "net48",
+                _ when sku.StartsWith(".NETFramework,Version=4") => "net40",
+                _ => sku,
+            };
         }
 
         private static void AddProjectDependencies(ProjectAssets projectAssets, JsonElement projectNode)
