@@ -8,8 +8,8 @@
   "resources": {
     "assembly": {
       "AngleSharp.dll": "sha256-fJcyDblaO8\/mJ5RkUdiseQvBvxjmBHPshIgB\/TLinT0=",
-      "BierFroh.dll": "sha256-nCmmq\/s9jmChdKFgM\/GlVc0iKSxLBzc5hWl75bWPc6w=",
-      "BierFroh.Modules.dll": "sha256-5X2en9anLp0Tyb7p7A+eu6AksE5VvP9SM1PaIXCCZVQ=",
+      "BierFroh.dll": "sha256-y33pJ0IuVSRI7I8n0eOAD63Z3NtZCL7\/GXNGXpRU+Uc=",
+      "BierFroh.Modules.dll": "sha256-wFWw09jdFJA8nv08gcTlc6zkMJsF2RJdcp4Vi0tno0g=",
       "Blazor.Diagrams.Core.dll": "sha256-iUhtCbSX3sUBmzLVf50V+NYv7rX0PfzNgf1SMF0j\/Pg=",
       "Blazor.Diagrams.dll": "sha256-jau3pMGX5\/olX1NbI0ecsrzhxVx+1uTMkfPuesQmFNc=",
       "Core.dll": "sha256-nizqzMvsI0AA\/TaJi5J13JDa\/wUSwvAyav4Xo\/5mRKg=",
