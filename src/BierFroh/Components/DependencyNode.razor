@@ -27,7 +27,7 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public Dependency Node { get; set; }
+    public Dependency Node { get; set; } = null!;
 
     public string GetCardStyle()
     {
