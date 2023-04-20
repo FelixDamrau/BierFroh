@@ -7,7 +7,7 @@ public static class RawPlayerDataParser
 {
     public static async Task<Result<IEnumerable<IHtmlTableRowElement>>> GetAllRawPlayerData(string data)
     {
-        var context = BrowsingContext.New(Configuration.Default);
+        var context = BrowsingContext.New(AngleSharp.Configuration.Default);
         var document = await context.OpenAsync(req => req.Content(data));
 
         var table = document.All.FirstOrDefault(n => n.Id == "ranking");

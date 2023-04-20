@@ -11,13 +11,13 @@
             <MudTextField  HelperText="Insert SQL query result, including headers, here" Label="raw data" Variant="Variant.Outlined" @bind-Value="rawData" Lines="6" />
         </MudItem>
         <MudItem>
-            <MudButton StartIcon="@Icons.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">Test data</MudButton>
+            <MudButton StartIcon="@Icons.Material.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">Test data</MudButton>
         </MudItem>
         <MudItem>
-            <MudButton StartIcon="@Icons.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick">Parse</MudButton>
+            <MudButton StartIcon="@Icons.Material.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick">Parse</MudButton>
         </MudItem>
         <MudItem>
-            <MudButton StartIcon="@Icons.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick">Refresh Query</MudButton>
+            <MudButton StartIcon="@Icons.Material.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick">Refresh Query</MudButton>
         </MudItem>
         <MudItem>
             <CopyToClipboardButton Copy="@sqlQuery" />

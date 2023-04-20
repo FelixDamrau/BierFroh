@@ -1,9 +1,6 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.ColorSpaces;
+﻿using SixLabors.ImageSharp.ColorSpaces;
 using SixLabors.ImageSharp.ColorSpaces.Conversion;
 using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 
 namespace BierFroh.Modules.Logo;
 public class Generator
@@ -61,16 +58,15 @@ public class Generator
 
     private IReadOnlyList<Color> CreatePalette(float hue, float hueRotation, float shade)
     {
-        var converter = new ColorSpaceConverter();
         var colors = GetPaletteColors(hue, hueRotation, shade);
         return colors
             .Select(c => new Hsv(c.Hue, c.Saturation, c.Brightness))
             .Select(c => GetRgb32(c))
             .ToList();
 
-        Color GetRgb32(Hsv hsv)
+        static Color GetRgb32(Hsv hsv)
         {
-            var rgb = converter.ToRgb(hsv);
+            var rgb = ColorSpaceConverter.ToRgb(hsv);
             var rgba32 = new Rgba32(rgb.R, rgb.G, rgb.B);
             return new Color(rgba32);
         }
