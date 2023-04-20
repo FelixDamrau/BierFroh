@@ -12,6 +12,8 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## Versions
 
+* 1.3.0
+  * Update to .NET7
 * 1.2.3
   * Project assets
     * Add possibility to filter name spaces
@@ -34,7 +36,7 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 * 1.1.0
   * Add logo generation
 * 1.0.1
-  * Upgrade to net6
+  * Upgrade to .NET6
   * Project restructure
 * 1.0.0
   * Initial version with KickTipp, InsertToSql and LogAnalyzer 🥳
