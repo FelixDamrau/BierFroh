@@ -6,7 +6,7 @@
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
     <MudText Typo="Typo.h3" GutterBottom="true">Log Analyzer</MudText>
     <InputFile id="fileInput" OnChange="OnInputFileChange" hidden />
-    <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.UploadFile" for="fileInput">Log laden</MudButton>
+    <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.UploadFile" for="fileInput">Log laden</MudButton>
 
     <MudTable Items="logs" Dense="true" Striped="true" Hover="true" Filter="new Func<LogEntry,bool>(Filter)">
         <ToolBarContent>
