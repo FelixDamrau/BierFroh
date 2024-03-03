@@ -26,6 +26,7 @@ var s = {
         }
     }),
     observe: (element, ref, id) => {
+        if (!element) return;
         s.ro.observe(element);
         s.tracked[id] = {
             ref: ref
@@ -39,7 +40,9 @@ var s = {
         }
     },
     unobserve: (element, id) => {
-        s.ro.unobserve(element);
+        if (element) {
+            s.ro.unobserve(element);
+        }
         delete s.tracked[id];
         delete s.canvases[id];
     }
@@ -52,4 +55,4 @@ window.addEventListener('scroll', () => {
         canvas.ref.invokeMethodAsync('OnResize', canvas.lastBounds);
     }
 });
-s.mo.observe(document.body, { childList: true, subtree: true });
+s.mo.observe(document.body, {childList: true, subtree: true});
