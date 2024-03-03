@@ -35,20 +35,20 @@ public class Generator
         return "data:image/png;base64, " + Convert.ToBase64String(memoryStream.ToArray());
     }
 
-    public IReadOnlyList<HsvData> GetPaletteColors(float hue, float hueRotation, float shade)
+    public static IReadOnlyList<HsvData> GetPaletteColors(float hue, float hueRotation, float shade)
     {
         var saturation = 1;
         var brightness = 1;
         var rotatedHue = Mod(hue + hueRotation, 360);
-        return new[]
-        {
+        return
+        [
             new HsvData(hue, saturation, brightness),
             new HsvData(hue, saturation, brightness - 0.4f*shade),
             new HsvData(hue, saturation, brightness - shade),
             new HsvData(rotatedHue, saturation, brightness),
             new HsvData(rotatedHue, saturation, brightness - 0.4f*shade),
             new HsvData(rotatedHue, saturation, brightness - shade),
-        };
+        ];
     }
 
     private static void DrawSquare(Image<Rgba32> image, Rectangle square, Color fillColor) => image.Mutate(i => i.Fill(fillColor, square));
@@ -59,7 +59,7 @@ public class Generator
         return palette[rnd];
     }
 
-    private IReadOnlyList<Color> CreatePalette(float hue, float hueRotation, float shade)
+    private static List<Color> CreatePalette(float hue, float hueRotation, float shade)
     {
         var colors = GetPaletteColors(hue, hueRotation, shade);
         return colors

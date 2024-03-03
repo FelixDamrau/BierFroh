@@ -9,7 +9,7 @@ public class ProjectsAssetsDeserializerTests
     [ClassData(typeof(TestDataProvider))]
     public async void DoesSetProjectName(Stream stream)
     {
-        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(false);
+        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(true);
 
         Assert.False(string.IsNullOrWhiteSpace(projectAssets.ProjectName));
     }
@@ -18,7 +18,7 @@ public class ProjectsAssetsDeserializerTests
     [ClassData(typeof(TestDataProvider))]
     public async void DoesSetProjectVersion(Stream stream)
     {
-        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(false);
+        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(true);
 
         Assert.False(string.IsNullOrWhiteSpace(projectAssets.Version));
     }
@@ -27,7 +27,7 @@ public class ProjectsAssetsDeserializerTests
     [ClassData(typeof(TestDataProvider))]
     public async void DoesSetProjectFrameworks(Stream stream)
     {
-        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(false);
+        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(true);
 
         Assert.NotEmpty(projectAssets.Frameworks);
         Assert.All(projectAssets.Frameworks, (f) => Assert.False(string.IsNullOrWhiteSpace(f)));
@@ -37,7 +37,7 @@ public class ProjectsAssetsDeserializerTests
     [ClassData(typeof(TestDataProvider))]
     public async void DoesSetDependencyName(Stream stream)
     {
-        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(false);
+        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(true);
 
         Assert.NotEmpty(projectAssets.Dependencies);
         Assert.All(projectAssets.Dependencies, (d) => Assert.False(string.IsNullOrWhiteSpace(d.Name)));
@@ -47,7 +47,7 @@ public class ProjectsAssetsDeserializerTests
     [ClassData(typeof(TestDataProvider))]
     public async void DoesSetDependencyVersion(Stream stream)
     {
-        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(false);
+        var projectAssets = await ProjectAssetsDeserializer.DeserializeAsync(stream).ConfigureAwait(true);
 
         Assert.All(projectAssets.Dependencies, (d) => Assert.False(string.IsNullOrWhiteSpace(d.Version)));
     }

@@ -16,9 +16,4 @@ public class RawDataParserException : Exception
         : base(message, innerException)
     {
     }
-
-    protected RawDataParserException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-    }
 }
