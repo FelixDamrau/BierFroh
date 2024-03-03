@@ -27,7 +27,7 @@ public static class LogReader
         return lines;
     }
 
-    private static IReadOnlyList<LogEntry> GetLogEntries(IReadOnlyList<string> lines)
+    private static List<LogEntry> GetLogEntries(IReadOnlyList<string> lines)
     {
         var aggregatedLines = Aggregate(lines);
         var logEntries = new List<LogEntry>();
