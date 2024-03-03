@@ -1,8 +1,7 @@
-﻿using BierFroh.Components;
-using BierFroh.Model.ProjectAssets;
+﻿using BierFroh.Model.ProjectAssets;
 using BierFroh.Modules.DependencyGraph;
 using BierFroh.Modules.DependencyGraph.Model;
-using Blazor.Diagrams.Core;
+using Blazor.Diagrams;
 using Blazor.Diagrams.Core.Geometry;
 using Develix.Essentials.Core;
 using GraphShape.Algorithms.Layout;
@@ -14,7 +13,7 @@ namespace BierFroh.Pages;
 partial class ProjectAssets
 {
     private const long maxFileSize = 1024 * 1024 * 5; // 5MB
-    private readonly Diagram diagram = new();
+    private BlazorDiagram diagram = null!;
     private IProjectAssets? projectAssets;
     private string? selectedFramework;
     private IEnumerable<string>? selectedDependencyKeys;
@@ -128,7 +127,7 @@ partial class ProjectAssets
         return algorithm;
     }
 
-    private void UpdatePositions(ILayoutAlgorithm<Dependency, Edge<Dependency>, BidirectionalGraph<Dependency, Edge<Dependency>>> algorithm)
+    private static void UpdatePositions(ILayoutAlgorithm<Dependency, Edge<Dependency>, BidirectionalGraph<Dependency, Edge<Dependency>>> algorithm)
     {
         foreach (var vertPos in algorithm.VerticesPositions)
         {
@@ -139,6 +138,6 @@ partial class ProjectAssets
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        diagram.RegisterModelComponent<Dependency, DependencyNode>();
+        diagram = new BlazorDiagram();
     }
 }
