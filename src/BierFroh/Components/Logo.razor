@@ -62,8 +62,7 @@
 
     public void ColorsChanged()
     {
-        var colors = generator
-        .GetPaletteColors(hue, hueRotation, shade)
+        var colors = Generator.GetPaletteColors(hue, hueRotation, shade)
         .Select(hsv => ColorConverter.ToRgb(hsv))
         .Select(rgb => ColorConverter.ToCss(rgb))
         .ToList();

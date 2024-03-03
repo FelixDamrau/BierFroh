@@ -1,56 +1,49 @@
 ﻿using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace BierFroh.State
+namespace BierFroh.State;
+
+internal class AppStateProvider(IJSRuntime jSRuntime)
 {
-    internal class AppStateProvider
+    private readonly IJSRuntime jSRuntime = jSRuntime;
+
+    public async ValueTask<AppState> Get()
     {
-        private readonly IJSRuntime jSRuntime;
+        var data = await jSRuntime.InvokeAsync<string>("localStorage.getItem", "AppState");
+        if (data is null)
+            return AppState.Default;
 
-        public AppStateProvider(IJSRuntime jSRuntime)
-        {
-            this.jSRuntime = jSRuntime;
-        }
+        var appState = System.Text.Json.JsonSerializer.Deserialize<AppState>(data);
+        if (appState is null)
+            return AppState.Default;
 
-        public async ValueTask<AppState> Get()
-        {
-            var data = await jSRuntime.InvokeAsync<string>("localStorage.getItem", "AppState");
-            if (data is null)
-                return AppState.Default;
+        var validatedAppState = Validate(appState);
 
-            var appState = System.Text.Json.JsonSerializer.Deserialize<AppState>(data);
-            if (appState is null)
-                return AppState.Default;
+        return validatedAppState;
+    }
 
-            var validatedAppState = Validate(appState);
+    private static AppState Validate(AppState appState)
+    {
+        if (appState.Version != AppState.ProgramVersion)
+            return AppState.Default;
 
-            return validatedAppState;
-        }
+        var validatedAppState = appState;
+        if (appState.RootState.Version != RootState.ProgramVersion)
+            validatedAppState = validatedAppState with { RootState = RootState.Default };
 
-        private static AppState Validate(AppState appState)
-        {
-            if (appState.Version != AppState.ProgramVersion)
-                return AppState.Default;
+        return validatedAppState;
+    }
 
-            var validatedAppState = appState;
-            if (appState.RootState.Version != RootState.ProgramVersion)
-                validatedAppState = validatedAppState with { RootState = RootState.Default };
+    public async ValueTask Update(RootState rootState)
+    {
+        var appState = await Get();
+        var newAppState = appState with { RootState = rootState };
+        await Set(newAppState);
+    }
 
-            return validatedAppState;
-        }
-
-        public async ValueTask Update(RootState rootState)
-        {
-            var appState = await Get();
-            var newAppState = appState with { RootState = rootState };
-            await Set(newAppState);
-        }
-
-        private async ValueTask Set(AppState appState)
-        {
-            var serializedAppState = JsonSerializer.Serialize(appState);
-            await jSRuntime.InvokeVoidAsync("localStorage.setItem", "AppState", serializedAppState);
-        }
+    private async ValueTask Set(AppState appState)
+    {
+        var serializedAppState = JsonSerializer.Serialize(appState);
+        await jSRuntime.InvokeVoidAsync("localStorage.setItem", "AppState", serializedAppState);
     }
 }

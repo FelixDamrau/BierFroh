@@ -1,5 +1,5 @@
-﻿using Blazor.Diagrams.Core;
-using Blazor.Diagrams.Core.Models;
+﻿using Blazor.Diagrams.Core.Models;
+using Blazor.Diagrams.Core.PathGenerators;
 
 namespace BierFroh.Model.ProjectAssets;
 public class DependencyLink : LinkModel
@@ -11,9 +11,9 @@ public class DependencyLink : LinkModel
         TargetNode = targetNode;
         SourceMarker = LinkMarker.Circle;
         TargetMarker = LinkMarker.Arrow;
-        PathGenerator = PathGenerators.Smooth;
+        PathGenerator = new SmoothPathGenerator();
     }
 
-    public new Dependency SourceNode { get; }
-    public new Dependency TargetNode { get; }
+    public Dependency SourceNode { get; }
+    public Dependency TargetNode { get; }
 }

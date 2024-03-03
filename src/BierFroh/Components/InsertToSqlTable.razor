@@ -2,7 +2,7 @@
     <HeaderContent>
         @foreach (var (header, index) in Headers.Select((value, i) => (value, i)))
         {
-            <MudTh><MudCheckBox Checked="@activeColumnIndices[index]" CheckedChanged="@((bool b) => CheckedChanged(b, index))" />@header</MudTh>
+            <MudTh><MudCheckBox T="bool" Value="@activeColumnIndices[index]" ValueChanged="@(async (bool b) => await CheckedChanged(b, index))" />@header</MudTh>
         }
     </HeaderContent>
     <RowTemplate>
@@ -43,9 +43,9 @@
     [Parameter]
     public EventCallback<bool[]> ActiveColumnsChanged { get; set; }
 
-    private bool[] activeColumnIndices = Array.Empty<bool>();
+    private bool[] activeColumnIndices = [];
 
-    private async void CheckedChanged(bool isActive, int index)
+    private async Task CheckedChanged(bool isActive, int index)
     {
         activeColumnIndices[index] = isActive;
         await ActiveColumnsChanged.InvokeAsync(activeColumnIndices);

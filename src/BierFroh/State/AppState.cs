@@ -1,24 +1,21 @@
-﻿using System;
+﻿namespace BierFroh.State;
 
-namespace BierFroh.State
+internal record AppState(int Version, RootState RootState)
 {
-    internal record AppState(int Version, RootState RootState)
-    {
-        public const int ProgramVersion = 1;
+    public const int ProgramVersion = 1;
 
-        public static AppState Default = new(
-            Version: ProgramVersion,
-            RootState: RootState.Default
-                );
-    }
+    public static AppState Default = new(
+        Version: ProgramVersion,
+        RootState: RootState.Default
+            );
+}
 
-    internal record RootState(int Version, DateTime? LastVisit, bool IsDarkMode)
-    {
-        public const int ProgramVersion = 1;
+internal record RootState(int Version, DateTime? LastVisit, bool IsDarkMode)
+{
+    public const int ProgramVersion = 1;
 
-        public static RootState Default => new(
-            Version: ProgramVersion,
-            LastVisit: null,
-            IsDarkMode: false);
-    }
+    public static RootState Default => new(
+        Version: ProgramVersion,
+        LastVisit: null,
+        IsDarkMode: false);
 }
