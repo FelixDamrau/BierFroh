@@ -1,8 +1,6 @@
 ﻿@inject IJSRuntime jSRuntime;
 
-<MudTooltip Text="Copy to clipboard">
-    <MudButton StartIcon="@toggleIconName" Variant="Variant.Filled" OnClick="CopyToClipboard">Copy</MudButton>
-</MudTooltip>
+<MudButton StartIcon="@toggleIconName" Variant="Variant.Filled" OnClick="CopyToClipboard">Copy</MudButton>
 
 @code{
     private string toggleIconName = Icons.Material.Filled.ContentPaste;
