@@ -7,23 +7,31 @@
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
     <MudText Typo="Typo.h3" GutterBottom="true">Insert to SQL</MudText>
     <MudGrid>
-        <MudItem xs="12">
-            <MudTextField  HelperText="Insert SQL query result, including headers, here" Label="raw data" Variant="Variant.Outlined" @bind-Value="rawData" Lines="6" />
-        </MudItem>
-        <MudItem>
-            <MudButton StartIcon="@Icons.Material.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">Test data</MudButton>
-        </MudItem>
-        <MudItem>
-            <MudButton StartIcon="@Icons.Material.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick">Parse</MudButton>
-        </MudItem>
-        <MudItem>
-            <MudButton StartIcon="@Icons.Material.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick">Refresh Query</MudButton>
-        </MudItem>
-        <MudItem>
-            <CopyToClipboardButton Copy="@sqlQuery" />
-        </MudItem>
         <MudItem xs="2">
-            <MudTextField @bind-Value="tableName" Label="table name" />
+            <MudStack>
+                <MudTextField @bind-Value="tableName" Label="table name" Margin="Margin.Dense" Variant="Variant.Outlined" />
+                <InputFile id="fileInput" OnChange="UploadFile" hidden accept=".tsv" />
+                <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="fileInput">
+                    Upload raw data
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">
+                    Test data
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick" Disabled="rawData.Length == 0">
+                    Parse
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick" Disabled="tableData.Count == 0">
+                    Refresh Query
+                </MudButton>
+            </MudStack>
+        </MudItem>
+
+        <MudItem xs="10">
+            <MudTextField HelperText="Insert SQL query result, including headers, here - or upload a tab separated file."
+                          Label="raw data"
+                          Variant="Variant.Outlined"
+                          Lines="10"
+                          @bind-Value="rawData" />
         </MudItem>
 
         @if (tableData.Count > 0)
@@ -34,86 +42,13 @@
             <MudItem xs="12">
                 <MudTextField Style="font-family:monospace" Lines="7" Label="SQL Query" @bind-Value="sqlQuery" Variant="Variant.Outlined" />
             </MudItem>
+            <MudItem xs="2" Class="d-flex flex-column">
+                <CopyToClipboardButton Copy="@sqlQuery" />
+            </MudItem>
+            <MudItem xs="2" Class="d-flex flex-column">
+                <MudButton StartIcon="@Icons.Material.Filled.FileDownload" Variant="Variant.Filled" OnClick="DownloadQuery">Download query</MudButton>
+            </MudItem>
         }
     </MudGrid>
 </MudContainer>
 
-@code {
-    private string rawData = string.Empty;
-    private string sqlQuery = string.Empty;
-    private string tableName = "table";
-    private IReadOnlyList<List<string>> tableData = new List<List<string>>();
-    private bool[] activeColums = Array.Empty<bool>();
-
-    private void ActiveColumsChanged(bool[] activeColumns)
-    {
-        this.activeColums = activeColumns;
-    }
-
-    private void ParseClick(MouseEventArgs e)
-    {
-        var reader = new StringReader(rawData);
-        var parser = new RawDataParser(reader);
-        var list = new List<List<string>>();
-        while (parser.Read())
-        {
-            var line = parser.GetLineData();
-            list.Add(line.ToList());
-        }
-        tableData = list;
-
-        UpdateSqlStatement();
-    }
-
-    private void RefreshQueryClick(MouseEventArgs e)
-    {
-        UpdateSqlStatement();
-    }
-
-    private void GenerateTestDataClick(MouseEventArgs e)
-    {
-        rawData =
-            "Text\tNumber\tDateTime\r\n" +
-            "foo\t5\t2021-03-04 01:03:04.000\r\n" +
-            "bar\t12\t2021-05-04 13:43:32.302\r\n";
-    }
-
-    private void UpdateSqlStatement()
-    {
-        if (tableData.Count < 2)
-        {
-            sqlQuery = string.Empty;
-            return;
-        }
-
-        var valueRows = tableData.Skip(1).Select(t => $"  {CreateValueRow(t)}");
-
-        sqlQuery = $"INSERT INTO [{tableName}] ( { CreateSelectedRows(tableData[0]) } )\r\n" +
-                $"VALUES \r\n" +
-                $"{string.Join(",\r\n", valueRows)}";
-    }
-
-
-    private string CreateValueRow(IReadOnlyList<string> row)
-    {
-        var parsedCells = row
-            .Where((_, index) => IsActive(index))
-            .Select(c => SqlValueFormatter.Parse(c));
-        return $"( {string.Join(", ", parsedCells)} )";
-    }
-
-    private string CreateSelectedRows(IReadOnlyList<string> row)
-    {
-        var rowNames = row
-            .Where((_, index) => IsActive(index))
-            .Select(c => $"[{c}]");
-        return string.Join(", ", rowNames);
-    }
-
-    private bool IsActive(int index)
-    {
-        if (activeColums.Length <= index)
-            return true;
-        return activeColums[index];
-    }
-}

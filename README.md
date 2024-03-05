@@ -12,6 +12,11 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## Versions
 
+* 1.5.0
+  * Add upload raw data to InserToSql page
+  * Add download query as file to InserToSql page
+* 1.4.0
+  * Update to .NET8
 * 1.3.0
   * Update to .NET7
 * 1.2.3

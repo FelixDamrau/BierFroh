@@ -6,8 +6,7 @@ public class RawDataParser
 
     public RawDataParser(TextReader reader)
     {
-        if (reader is null)
-            throw new ArgumentNullException(nameof(reader));
+        ArgumentNullException.ThrowIfNull(reader);
         this.reader = reader;
     }
 
@@ -18,12 +17,16 @@ public class RawDataParser
 
     public int Count()
     {
-        return currentSplittedLine is not null ? currentSplittedLine.Count : throw new RawDataParserException();
+        return currentSplittedLine is not null 
+            ? currentSplittedLine.Count 
+            : throw new RawDataParserException();
     }
 
     public IReadOnlyList<string> GetLineData()
     {
-        return currentSplittedLine is not null ? currentSplittedLine : throw new RawDataParserException();
+        return currentSplittedLine is not null 
+            ? [.. currentSplittedLine]
+            : throw new RawDataParserException();
     }
 
     public bool Read()
@@ -34,7 +37,7 @@ public class RawDataParser
         }
 
         var splitted = readLine.Split("\t");
-        currentSplittedLine = splitted.ToList();
+        currentSplittedLine = [.. splitted];
         return true;
     }
 }
