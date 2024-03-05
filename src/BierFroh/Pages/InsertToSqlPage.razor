@@ -9,18 +9,29 @@
     <MudGrid>
         <MudItem xs="2">
             <MudStack>
-                <MudButton StartIcon="@Icons.Material.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">Test data</MudButton>
-                <MudButton StartIcon="@Icons.Material.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick">Parse</MudButton>
-                <MudButton StartIcon="@Icons.Material.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick">Refresh Query</MudButton>
-                <CopyToClipboardButton Copy="@sqlQuery" />
+                <MudTextField @bind-Value="tableName" Label="table name" Margin="Margin.Dense" Variant="Variant.Outlined" />
                 <InputFile id="fileInput" OnChange="UploadFile" hidden accept=".tsv" />
-                <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="fileInput" >Upload raw data</MudButton>
-                <MudTextField @bind-Value="tableName" Label="table name" Margin="Margin.Dense" Variant="Variant.Outlined"/>
+                <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="fileInput">
+                    Upload raw data
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">
+                    Test data
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick" Disabled="rawData.Length == 0">
+                    Parse
+                </MudButton>
+                <MudButton StartIcon="@Icons.Material.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick" Disabled="tableData.Count == 0">
+                    Refresh Query
+                </MudButton>
             </MudStack>
         </MudItem>
 
         <MudItem xs="10">
-            <MudTextField HelperText="Insert SQL query result, including headers, here" Label="raw data" Variant="Variant.Outlined" @bind-Value="rawData" Lines="12" />
+            <MudTextField HelperText="Insert SQL query result, including headers, here - or upload a tab separated file."
+                          Label="raw data"
+                          Variant="Variant.Outlined"
+                          Lines="10"
+                          @bind-Value="rawData" />
         </MudItem>
 
         @if (tableData.Count > 0)
@@ -31,7 +42,10 @@
             <MudItem xs="12">
                 <MudTextField Style="font-family:monospace" Lines="7" Label="SQL Query" @bind-Value="sqlQuery" Variant="Variant.Outlined" />
             </MudItem>
-            <MudItem>
+            <MudItem xs="2" Class="d-flex flex-column">
+                <CopyToClipboardButton Copy="@sqlQuery" />
+            </MudItem>
+            <MudItem xs="2" Class="d-flex flex-column">
                 <MudButton StartIcon="@Icons.Material.Filled.FileDownload" Variant="Variant.Filled" OnClick="DownloadQuery">Download query</MudButton>
             </MudItem>
         }
