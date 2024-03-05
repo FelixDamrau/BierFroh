@@ -60,11 +60,12 @@ public partial class InsertToSqlPage
         }
 
         var valueRows = tableData.Skip(1).Select(t => $"  {CreateValueRow(t)}");
-
+        var projection = CreateSelectedRows(tableData[0]);
         sqlQuery = $"""
-            INSERT INTO [{tableName}] ( {CreateSelectedRows(tableData[0])} )
-              VALUES
-              {string.Join("," + Environment.NewLine + "  ", valueRows)}
+            INSERT INTO [{tableName}] ( {projection} )
+            SELECT * FROM ( VALUES
+            {string.Join("," + Environment.NewLine, valueRows)}
+            )
             """;
     }
 
