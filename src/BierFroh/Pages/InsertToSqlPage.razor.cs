@@ -65,7 +65,7 @@ public partial class InsertToSqlPage
             INSERT INTO [{tableName}] ( {projection} )
             SELECT * FROM ( VALUES
             {string.Join("," + Environment.NewLine, valueRows)}
-            )
+            ) AS temp ( {projection} )
             """;
     }
 
