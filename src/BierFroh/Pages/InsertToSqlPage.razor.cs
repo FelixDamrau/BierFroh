@@ -95,9 +95,7 @@ public partial class InsertToSqlPage
 
     private async Task UploadFile(InputFileChangeEventArgs e)
     {
-        var file = e.GetMultipleFiles().Single();
-        rawData = await BrowserFileReader.ReadFile(file);
-        
+        rawData = await BrowserFileReader.ReadFile(e.File, 4_096_000);
         StateHasChanged();
     }
 
