@@ -11,7 +11,7 @@ public partial class InsertToSqlPage
     private string rawData = string.Empty;
     private string sqlQuery = string.Empty;
     private string tableName = "table";
-    private IReadOnlyList<List<string>> tableData = [];
+    private IReadOnlyList<IReadOnlyList<string>> tableData = [];
     private bool[] activeColumns = [];
 
     [Inject]
@@ -26,11 +26,11 @@ public partial class InsertToSqlPage
     {
         var reader = new StringReader(rawData);
         var parser = new RawDataParser(reader);
-        var list = new List<List<string>>();
+        var list = new List<IReadOnlyList<string>>();
         while (parser.Read())
         {
             var line = parser.GetLineData();
-            list.Add([.. line]);
+            list.Add(line);
         }
         tableData = list;
 
