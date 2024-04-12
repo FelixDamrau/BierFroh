@@ -37,7 +37,7 @@
         @if (tableData.Count > 0)
         {
             <MudItem xs="12">
-                <InsertToSqlTable Content="tableData.Skip(1).ToList()" Headers="tableData[0]" ActiveColumnsChanged="ActiveColumsChanged" />
+                <InsertToSqlTable Content="tableData.Skip(1).ToList()" Headers="tableData[0].ToList()" ActiveColumnsChanged="ActiveColumsChanged" />
             </MudItem>
             <MudItem xs="12">
                 <MudTextField Style="font-family:monospace" Lines="7" Label="SQL Query" @bind-Value="sqlQuery" Variant="Variant.Outlined" />

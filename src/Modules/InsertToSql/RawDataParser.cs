@@ -22,7 +22,7 @@ public class RawDataParser
             : throw new RawDataParserException();
     }
 
-    public IReadOnlyList<string> GetLineData()
+    public List<string> GetLineData()
     {
         return currentSplittedLine is not null 
             ? [.. currentSplittedLine]

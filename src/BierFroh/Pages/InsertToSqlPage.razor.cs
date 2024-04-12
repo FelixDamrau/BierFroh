@@ -11,7 +11,7 @@ public partial class InsertToSqlPage
     private string rawData = string.Empty;
     private string sqlQuery = string.Empty;
     private string tableName = "table";
-    private IReadOnlyList<IReadOnlyList<string>> tableData = [];
+    private IReadOnlyList<IList<string>> tableData = [];
     private bool[] activeColumns = [];
 
     [Inject]
@@ -26,7 +26,7 @@ public partial class InsertToSqlPage
     {
         var reader = new StringReader(rawData);
         var parser = new RawDataParser(reader);
-        var list = new List<IReadOnlyList<string>>();
+        var list = new List<IList<string>>();
         while (parser.Read())
         {
             var line = parser.GetLineData();
@@ -70,7 +70,7 @@ public partial class InsertToSqlPage
     }
 
 
-    private string CreateValueRow(IReadOnlyList<string> row)
+    private string CreateValueRow(IEnumerable<string> row)
     {
         var parsedCells = row
             .Where((_, index) => IsActive(index))
@@ -78,7 +78,7 @@ public partial class InsertToSqlPage
         return $"( {string.Join(", ", parsedCells)} )";
     }
 
-    private string CreateSelectedRows(IReadOnlyList<string> row)
+    private string CreateSelectedRows(IEnumerable<string> row)
     {
         var rowNames = row
             .Where((_, index) => IsActive(index))
