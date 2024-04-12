@@ -4,36 +4,25 @@
 
 @code{
     private string toggleIconName = Icons.Material.Filled.ContentPaste;
-    private string? copy;
-    [Parameter]
-    public string? Copy
-    {
-        get => copy;
-        set
-        {
-            if (copy != value)
-            {
-                ValueChanged();
-                copy = value;
-                toggleIconName = Icons.Material.Filled.ContentPaste;
-            }
-        }
-    }
 
-    private void ValueChanged()
+    [Parameter]
+    public string? Copy { get; set; }
+
+    protected override void OnParametersSet()
     {
+        base.OnParametersSet();
         toggleIconName = Icons.Material.Filled.ContentPaste;
     }
 
     private async Task CopyToClipboard()
     {
-        if (copy is null)
+        if (Copy is null)
             return;
 
         // Writing to the clipboard may be denied, so you must handle the exception
         try
         {
-            await jSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", copy);
+            await jSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", Copy);
             toggleIconName = Icons.Material.Filled.CheckCircle;
         }
         catch
