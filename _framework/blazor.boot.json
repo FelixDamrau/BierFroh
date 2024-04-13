@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "BierFroh",
   "resources": {
-    "hash": "sha256-J5AZGlFV7Vcjh/BSunIpQqQhN89yebCa7vHrX81A4jo=",
+    "hash": "sha256-fwnp2B/s15GALim8oq4S4j9oTmfYyYqeW5bpAkONnVc=",
     "jsModuleNative": {
       "dotnet.native.8.0.4.6vlmefabfv.js": "sha256-ju0+XWE0ihz554eKEj0HQ8Opa61xpbUIaX5/MNo8we4="
     },
@@ -18,8 +18,8 @@
     },
     "assembly": {
       "AngleSharp.wasm": "sha256-Y4sEENvtK/83f8mNpWJK5bO08oFlVvOWzaQV82kDcb4=",
-      "BierFroh.Modules.wasm": "sha256-24D0eB9Pra9eN3ef2J1O5jQ0j9DmHi7WBbeWZirCrgU=",
-      "BierFroh.wasm": "sha256-8aid2WCOhVWrNQUkxLYDOD69JW3s5ChRs1PyKnp1iXE=",
+      "BierFroh.Modules.wasm": "sha256-z5jquLHngVmF/he3ieGpC8GPIVni+zil8aOIJ/4Yhq8=",
+      "BierFroh.wasm": "sha256-Z4m29uckfY9uS/xbb40d3SrxEnVMMUlzwR3K/QWLYYI=",
       "Blazor.Diagrams.Core.wasm": "sha256-xl7qMS84/QSu/qErIBFodP+hhtrbyhyTv0u/3oNkhE8=",
       "Blazor.Diagrams.wasm": "sha256-ArjoytHbZ0nCy1m0R3BNxmvmzG6if9rG9fKhqTlcKk4=",
       "Core.wasm": "sha256-mbeT+nrqq7LQb6/FFaH6mrVN2BG63SIbDKzQjX2An0g=",
