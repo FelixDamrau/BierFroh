@@ -1,6 +1,7 @@
 ﻿using BierFroh.Modules.DependencyGraph.Model;
 
 namespace BierFroh.Modules.Tests.DependencyGraph;
+
 public class DependencyTests
 {
     private readonly Dependency.DependencyCollection dependencyCollection = new();
@@ -43,7 +44,7 @@ public class DependencyTests
     }
 
     [Fact]
-    public void SameDependencieCanBeAddedOnceToHashSet()
+    public void SameDependencyCanBeAddedOnceToHashSet()
     {
         var name = "name";
         var framework = "framework";

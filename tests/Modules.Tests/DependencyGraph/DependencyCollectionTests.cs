@@ -1,12 +1,13 @@
 ﻿using BierFroh.Modules.DependencyGraph.Model;
 
 namespace BierFroh.Modules.Tests.DependencyGraph;
-public class DependecyCollectionTests
+
+public class DependencyCollectionTests
 {
-    private readonly Dependency.DependencyCollection dependencyCollection = new();
+    private readonly Dependency.DependencyCollection dependencyCollection = [];
 
     [Fact]
-    public void CanAddDependecy()
+    public void CanAddDependency()
     {
         var dependecy = dependencyCollection.Add("name", "framework", "version");
 

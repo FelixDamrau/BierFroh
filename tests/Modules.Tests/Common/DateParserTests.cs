@@ -3,15 +3,17 @@
 namespace BierFroh.Modules.Tests.Common;
 public class DateParserTests
 {
-    public static IEnumerable<object[]> GetPaseValidDateData()
+    public static TheoryData<string, DateTime> GetParseValidDateData()
     {
-
-        yield return new object[] { "2020-03-04 05:06:07,890", new DateTime(2020, 3, 4, 5, 6, 7, 890) };
-        yield return new object[] { "2020-03-04 05:06:07,890 Yop!", new DateTime(2020, 3, 4, 5, 6, 7, 890) };
+        return new TheoryData<string, DateTime>()
+        {
+            { "2020-03-04 05:06:07,890", new DateTime(2020, 3, 4, 5, 6, 7, 890) },
+            { "2020-03-04 05:06:07,890 Yop!", new DateTime(2020, 3, 4, 5, 6, 7, 890) },
+        };
     }
 
     [Theory]
-    [MemberData(nameof(GetPaseValidDateData))]
+    [MemberData(nameof(GetParseValidDateData))]
     public void ParseValidDate(string dateString, DateTime expectedResult)
     {
         var date = DateParser.GetDate(dateString);
@@ -21,15 +23,18 @@ public class DateParserTests
         Assert.Equal(expectedResult, date.Value);
     }
 
-    public static IEnumerable<object[]> GetPaseInvalidDateData()
+    public static TheoryData<string> GetParseInvalidDateData()
     {
-        yield return new object[] { "This is not a date: 2020-03-04 05:06:07,890" };
-        yield return new object[] { "2020-03-04 05:06:07,89" };
-        yield return new object[] { "Foo" };
+        return new TheoryData<string>()
+        {
+            { "This is not a date: 2020-03-04 05:06:07,890" },
+            { "2020-03-04 05:06:07,89" },
+            { "Foo" },
+        };
     }
 
     [Theory]
-    [MemberData(nameof(GetPaseInvalidDateData))]
+    [MemberData(nameof(GetParseInvalidDateData))]
     public void ParseInvalidDate(string dateString)
     {
         var date = DateParser.GetDate(dateString);

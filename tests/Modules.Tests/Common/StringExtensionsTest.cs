@@ -5,7 +5,7 @@ public class StringExtensionsTest
 {
     [Theory]
     [MemberData(nameof(GetValidRequests))]
-    public void TestNthOccurance(string? searchString, char value, int nthOccurrence, int expectedIndex)
+    public void TestNthOccurrence(string? searchString, char value, int nthOccurrence, int expectedIndex)
     {
         var index = searchString.NthIndexOf(value, nthOccurrence);
 
@@ -21,21 +21,27 @@ public class StringExtensionsTest
         Assert.IsType<ArgumentException>(exception);
     }
 
-    public static IEnumerable<object?[]> GetValidRequests()
+    public static TheoryData<string?, char, int, int> GetValidRequests()
     {
-        yield return new object?[] { null, 'c', 1, -1 };
-        yield return new object?[] { null, 'd', 4, -1 };
-        yield return new object[] { "searchString", "S", 1, 6 };
-        yield return new object[] { "Lorem ipsum dolor sit amet", 'm', 1, 4 };
-        yield return new object[] { "Lorem ipsum dolor sit amet", 'm', 2, 10 };
-        yield return new object[] { "Lorem ipsum dolor sit amet", 'm', 3, 23 };
-        yield return new object[] { "Lorem ipsum dolor sit amet", 'm', 4, -1 };
+        return new TheoryData<string?, char, int, int>()
+        {
+            { null, 'c', 1, -1 },
+            { null, 'd', 4, -1 },
+            { "searchString", 'S', 1, 6 },
+            { "Lorem ipsum dolor sit amet", 'm', 1, 4 },
+            { "Lorem ipsum dolor sit amet", 'm', 2, 10 },
+            { "Lorem ipsum dolor sit amet", 'm', 3, 23 },
+            { "Lorem ipsum dolor sit amet", 'm', 4, -1 },
+        };
     }
 
-    public static IEnumerable<object?[]> GetInvalidRequests()
+    public static TheoryData<string?, char, int> GetInvalidRequests()
     {
-        yield return new object?[] { null, 'c', 0 };
-        yield return new object[] { "Lorem ipsum dolor sit amet", 'm', 0 };
-        yield return new object[] { "Lorem ipsum dolor sit amet", 'm', -1 };
+        return new TheoryData<string?, char, int>()
+        {
+            { null, 'c', 0 },
+            { "Lorem ipsum dolor sit amet", 'm', 0 },
+            { "Lorem ipsum dolor sit amet", 'm', -1 },
+        };
     }
 }

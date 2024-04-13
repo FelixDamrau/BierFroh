@@ -1,6 +1,7 @@
 ﻿using BierFroh.Modules.InsertToSql;
 
 namespace BierFroh.Modules.Tests.InsertToSql;
+
 public class RawDataParserTests
 {
     [Fact]
@@ -144,7 +145,7 @@ public class RawDataParserTests
     }
 
     [Fact]
-    public async Task ParserGetLineDataAfterReadGivesSplittedLine()
+    public async Task ParserGetLineDataAfterReadGivesSplitLine()
     {
         var rawDataParser = Create("One\tTwo");
         var expectedLineData = new List<string> { "One", "Two" };
