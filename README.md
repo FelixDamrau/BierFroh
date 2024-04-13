@@ -12,6 +12,8 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## Versions
 
+* 1.5.2
+  * Add 404.html hack to allow refresh in Github pages
 * 1.5.1
   * Increase max file size for `IBrowserFile` file uploads
   * Fix SQL query
