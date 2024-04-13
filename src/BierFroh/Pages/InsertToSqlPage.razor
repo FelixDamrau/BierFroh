@@ -17,7 +17,7 @@
                 <MudButton StartIcon="@Icons.Material.Filled.AutoFixHigh" Variant="Variant.Filled" OnClick="GenerateTestDataClick">
                     Test data
                 </MudButton>
-                <MudButton StartIcon="@Icons.Material.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClick" Disabled="rawData.Length == 0">
+                <MudButton StartIcon="@Icons.Material.Filled.FileUpload" Variant="Variant.Filled" OnClick="ParseClickAsync" Disabled="rawData.Length == 0">
                     Parse
                 </MudButton>
                 <MudButton StartIcon="@Icons.Material.Filled.Refresh" Variant="Variant.Filled" OnClick="RefreshQueryClick" Disabled="tableData.Count == 0">

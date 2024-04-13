@@ -22,12 +22,12 @@ public partial class InsertToSqlPage
         this.activeColumns = activeColumns;
     }
 
-    private void ParseClick(MouseEventArgs e)
+    private async Task ParseClickAsync(MouseEventArgs e)
     {
         var reader = new StringReader(rawData);
         var parser = new RawDataParser(reader);
         var list = new List<IList<string>>();
-        while (parser.Read())
+        while (await parser.ReadAsync())
         {
             var line = parser.GetLineData();
             list.Add(line);

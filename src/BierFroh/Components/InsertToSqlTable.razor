@@ -1,4 +1,4 @@
-﻿<MudTable Height="300px" FixedHeader="true" Items="Content" Dense="true" Striped="true" Hover="true">
+﻿<MudTable Height="300px" FixedHeader="true" Items="Content" Dense="true" Striped="true" Hover="true" Virtualize="true">
     <HeaderContent>
         @foreach (var (header, index) in Headers.Select((value, i) => (value, i)))
         {
@@ -20,4 +20,3 @@
         }
     </RowEditingTemplate>
 </MudTable>
-

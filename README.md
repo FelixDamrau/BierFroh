@@ -11,7 +11,8 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 ヾ(￣▽￣) Bye~Bye
 
 ## Versions
-
+* 1.5.4
+  * Performance improvements for large files for InsertToSql page
 * 1.5.3
   * Package upgrades
 * 1.5.2
