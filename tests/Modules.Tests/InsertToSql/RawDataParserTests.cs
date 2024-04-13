@@ -14,45 +14,45 @@ public class RawDataParserTests
     }
 
     [Fact]
-    public void ReadReturnsFalseForEmptyReader()
+    public async Task ReadReturnsFalseForEmptyReader()
     {
         var rawDataParser = Create(string.Empty);
 
-        var didRead = rawDataParser.Read();
+        var didRead = await rawDataParser.ReadAsync();
 
         Assert.False(didRead);
     }
 
     [Fact]
-    public void ReadReturnsTrueForNonEmptyReader()
+    public async Task ReadReturnsTrueForNonEmptyReader()
     {
         var rawDataParser = Create("Not empty");
 
-        var didRead = rawDataParser.Read();
+        var didRead = await rawDataParser.ReadAsync();
 
         Assert.True(didRead);
     }
 
     [Fact]
-    public void ReadReturnsTrueExactlyOnceForSingleLineInput()
+    public async Task ReadReturnsTrueExactlyOnceForSingleLineInput()
     {
         var rawDataParser = Create("Not empty");
 
-        var didReadOnce = rawDataParser.Read();
-        var didReadTwice = rawDataParser.Read();
+        var didReadOnce = await rawDataParser.ReadAsync();
+        var didReadTwice = await rawDataParser.ReadAsync();
 
         Assert.True(didReadOnce);
         Assert.False(didReadTwice);
     }
 
     [Fact]
-    public void ReadReturnsTrueExactlyTwiceForTwoLineInput()
+    public async Task ReadReturnsTrueExactlyTwiceForTwoLineInput()
     {
         var rawDataParser = Create("Not empty\nLine two");
 
-        var didReadOnce = rawDataParser.Read();
-        var didReadTwice = rawDataParser.Read();
-        var didReadTrice = rawDataParser.Read();
+        var didReadOnce = await rawDataParser.ReadAsync();
+        var didReadTwice = await rawDataParser.ReadAsync();
+        var didReadTrice = await rawDataParser.ReadAsync();
 
         Assert.True(didReadOnce);
         Assert.True(didReadTwice);
@@ -71,27 +71,27 @@ public class RawDataParserTests
     }
 
     [Fact]
-    public void IndexingParserAfterSingleReadsGetsInputLine()
+    public async Task IndexingParserAfterSingleReadsGetsInputLine()
     {
         var line1 = "A line of text";
         var line2 = "Another line of text";
         var rawDataParser = Create(line1 + "\n" + line2);
 
-        _ = rawDataParser.Read();
+        _ = await rawDataParser.ReadAsync();
         var readData = rawDataParser[0];
 
         Assert.Equal(line1, readData);
     }
 
     [Fact]
-    public void IndexingParserAfterMultipleReadsGetsInputLine()
+    public async Task IndexingParserAfterMultipleReadsGetsInputLine()
     {
         var line1 = "A line of text";
         var line2 = "Another line of text";
         var rawDataParser = Create(line1 + "\n" + line2);
 
-        _ = rawDataParser.Read();
-        _ = rawDataParser.Read();
+        _ = await rawDataParser.ReadAsync();
+        _ = await rawDataParser.ReadAsync();
         var readData = rawDataParser[0];
 
         Assert.Equal(line2, readData);
@@ -109,11 +109,11 @@ public class RawDataParserTests
     }
 
     [Fact]
-    public void ParserCountAfterReadReturnsOne()
+    public async Task ParserCountAfterReadReturnsOne()
     {
         var rawDataParser = Create("A text");
 
-        _ = rawDataParser.Read();
+        _ = await rawDataParser.ReadAsync();
         var count = rawDataParser.Count();
 
         Assert.Equal(1, count);
@@ -122,11 +122,11 @@ public class RawDataParserTests
     [Theory]
     [InlineData("One\tTwo", 2)]
     [InlineData("One\tTwo\tThree", 3)]
-    public void ParserCountAfterReadReturnsNumberOfSegments(string rawData, int expectedCount)
+    public async Task ParserCountAfterReadReturnsNumberOfSegments(string rawData, int expectedCount)
     {
         var rawDataParser = Create(rawData);
 
-        _ = rawDataParser.Read();
+        _ = await rawDataParser.ReadAsync();
         var count = rawDataParser.Count();
 
         Assert.Equal(expectedCount, count);
@@ -144,18 +144,18 @@ public class RawDataParserTests
     }
 
     [Fact]
-    public void ParserGetLineDataAfterReadGivesSplittedLine()
+    public async Task ParserGetLineDataAfterReadGivesSplittedLine()
     {
         var rawDataParser = Create("One\tTwo");
         var expectedLineData = new List<string> { "One", "Two" };
 
-        rawDataParser.Read();
+        await rawDataParser.ReadAsync();
         var lineData = rawDataParser.GetLineData();
 
         Assert.Equal(expectedLineData, lineData);
     }
 
-    private RawDataParser Create(string rawData)
+    private static RawDataParser Create(string rawData)
     {
         var reader = new StringReader(rawData);
         return new RawDataParser(reader);
