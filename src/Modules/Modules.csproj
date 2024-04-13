@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.1.1" />
-    <PackageReference Include="Develix.Essentials" Version="1.1.2" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.1" />
+    <PackageReference Include="AngleSharp" />
+    <PackageReference Include="Develix.Essentials" />
+    <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" />
   </ItemGroup>
 
 </Project>
