@@ -2,7 +2,7 @@
 public class RawDataParser
 {
     private readonly TextReader reader;
-    private IReadOnlyList<string>? currentSplittedLine;
+    private IList<string>? currentSplittedLine;
 
     public RawDataParser(TextReader reader)
     {
@@ -25,15 +25,14 @@ public class RawDataParser
     public IList<string> GetLineData()
     {
         return currentSplittedLine is not null 
-            ? [.. currentSplittedLine]
+            ? currentSplittedLine
             : throw new RawDataParserException();
     }
 
     public async Task<bool> ReadAsync()
-        {
+    {
         if (await reader.ReadLineAsync() is not string readLine)
             return false;
-        }
 
         var splitted = readLine.Split("\t");
         currentSplittedLine = splitted;
