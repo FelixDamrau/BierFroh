@@ -29,10 +29,9 @@ public class RawDataParser
             : throw new RawDataParserException();
     }
 
-    public bool Read()
-    {
-        if (reader.ReadLine() is not string readLine)
+    public async Task<bool> ReadAsync()
         {
+        if (await reader.ReadLineAsync() is not string readLine)
             return false;
         }
 
