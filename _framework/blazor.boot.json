@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "BierFroh",
   "resources": {
-    "hash": "sha256-pL0/0+uZ1oZq3BOSnu6t33j8V/l1OvkU3hQtQW5evkA=",
+    "hash": "sha256-pSy5FS9sg/kILGE+yEcuI66h/f0m+2v1cEYjvtHdBUY=",
     "jsModuleNative": {
       "dotnet.native.8.0.4.6vlmefabfv.js": "sha256-ju0+XWE0ihz554eKEj0HQ8Opa61xpbUIaX5/MNo8we4="
     },
@@ -18,8 +18,8 @@
     },
     "assembly": {
       "AngleSharp.wasm": "sha256-/XGRcdN9culkw7P54MBFSGc9elHABZs6YSDx4qSYsE4=",
-      "BierFroh.Modules.wasm": "sha256-EPYsej/vpQIhcHsND84e8Nu/x6rG19jBSG6tvFymJGs=",
-      "BierFroh.wasm": "sha256-N/jcfP6rySyDtynjV2mgzHrA2LrCt0BwAH5jA8d3QFQ=",
+      "BierFroh.Modules.wasm": "sha256-oyaV7FFGHD5Zzj4EchxVvTGnVOZjyUQnpKnq8Yd7A+g=",
+      "BierFroh.wasm": "sha256-fy6dZ4oKluINocRC0giqJxM+lPt5Zypz+ATL7BdBHB0=",
       "Blazor.Diagrams.Core.wasm": "sha256-xl7qMS84/QSu/qErIBFodP+hhtrbyhyTv0u/3oNkhE8=",
       "Blazor.Diagrams.wasm": "sha256-ArjoytHbZ0nCy1m0R3BNxmvmzG6if9rG9fKhqTlcKk4=",
       "Core.wasm": "sha256-mbeT+nrqq7LQb6/FFaH6mrVN2BG63SIbDKzQjX2An0g=",
@@ -66,10 +66,9 @@
       "System.Net.ServicePoint.wasm": "sha256-6yXXmUcnSZ1T1ajYvADw7CE/ZInFBXQYh77p0oTvMN0=",
       "System.Net.WebHeaderCollection.wasm": "sha256-6H1dvPYLbX+PBx627AlUyFdL73xB9Q1x33vfp8RZMQA=",
       "System.ObjectModel.wasm": "sha256-V8gqVrsS0vZGglzQcHmvsfRguH0S3q/enEYUzG/qx5Q=",
-      "System.Private.CoreLib.wasm": "sha256-TyzycZVV5iJBPLTfUEwEzJVZ0OyDR+AiHemWR+ExMlU=",
+      "System.Private.CoreLib.wasm": "sha256-3pstieBnhsgGL0nMTVSXAFNSNoYj/xtgWx31dRIu+Gw=",
       "System.Private.Uri.wasm": "sha256-4qhkhSd/76ZyUitePVhDiXoDP3jVnJN0Ixp2Nx0oLM8=",
       "System.Runtime.InteropServices.JavaScript.wasm": "sha256-kUAntie1LITSx+DDAX09PM1R1+8pFAgRZHar1fv47T0=",
-      "System.Runtime.InteropServices.wasm": "sha256-W1/IPgd0DC2TcuFXOXnDFEJQZoUi+Lvdf8KTo2cxo24=",
       "System.Runtime.wasm": "sha256-swpDUE8dddufv6Pzxqa49glsjFEwzSDWWPQgzGdzlBY=",
       "System.Security.Cryptography.wasm": "sha256-pIVF7jIEYgKTWzzRzbSr2tguUI6GIoEwNLNi1N10E3s=",
       "System.Text.Encoding.CodePages.wasm": "sha256-JfsQT6+IIHa9Qc+nyRJhcOBIsYSyvPcWW3LelfcL7AE=",
