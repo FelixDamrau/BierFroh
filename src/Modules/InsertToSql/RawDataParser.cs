@@ -22,7 +22,7 @@ public class RawDataParser
             : throw new RawDataParserException();
     }
 
-    public IReadOnlyList<string> GetLineData()
+    public IList<string> GetLineData()
     {
         return currentSplittedLine is not null 
             ? [.. currentSplittedLine]
@@ -37,7 +37,7 @@ public class RawDataParser
         }
 
         var splitted = readLine.Split("\t");
-        currentSplittedLine = [.. splitted];
+        currentSplittedLine = splitted;
         return true;
     }
 }

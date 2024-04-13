@@ -11,7 +11,7 @@ public partial class InsertToSqlPage
     private string rawData = string.Empty;
     private string sqlQuery = string.Empty;
     private string tableName = "table";
-    private IReadOnlyList<List<string>> tableData = [];
+    private IReadOnlyList<IList<string>> tableData = [];
     private bool[] activeColumns = [];
 
     [Inject]
@@ -26,11 +26,11 @@ public partial class InsertToSqlPage
     {
         var reader = new StringReader(rawData);
         var parser = new RawDataParser(reader);
-        var list = new List<List<string>>();
+        var list = new List<IList<string>>();
         while (parser.Read())
         {
             var line = parser.GetLineData();
-            list.Add([.. line]);
+            list.Add(line);
         }
         tableData = list;
 
@@ -65,12 +65,12 @@ public partial class InsertToSqlPage
             INSERT INTO [{tableName}] ( {projection} )
             SELECT * FROM ( VALUES
             {string.Join("," + Environment.NewLine, valueRows)}
-            )
+            ) AS temp ( {projection} )
             """;
     }
 
 
-    private string CreateValueRow(IReadOnlyList<string> row)
+    private string CreateValueRow(IEnumerable<string> row)
     {
         var parsedCells = row
             .Where((_, index) => IsActive(index))
@@ -78,7 +78,7 @@ public partial class InsertToSqlPage
         return $"( {string.Join(", ", parsedCells)} )";
     }
 
-    private string CreateSelectedRows(IReadOnlyList<string> row)
+    private string CreateSelectedRows(IEnumerable<string> row)
     {
         var rowNames = row
             .Where((_, index) => IsActive(index))
@@ -95,9 +95,7 @@ public partial class InsertToSqlPage
 
     private async Task UploadFile(InputFileChangeEventArgs e)
     {
-        var file = e.GetMultipleFiles().Single();
-        rawData = await BrowserFileReader.ReadFile(file);
-        
+        rawData = await BrowserFileReader.ReadFile(e.File, 4_096_000);
         StateHasChanged();
     }
 

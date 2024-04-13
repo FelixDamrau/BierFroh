@@ -12,6 +12,9 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 
 ## Versions
 
+* 1.5.1
+  * Increase max file size for `IBrowserFile` file uploads
+  * Fix SQL query
 * 1.5.0
   * Add upload raw data to InserToSql page
   * Add download query as file to InserToSql page

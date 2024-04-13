@@ -21,33 +21,3 @@
     </RowEditingTemplate>
 </MudTable>
 
-@code{
-    private IReadOnlyList<string> headers = new List<string>();
-    [Parameter]
-    public IReadOnlyList<string> Headers
-    {
-        get => headers;
-        set
-        {
-            if (value != headers)
-            {
-                activeColumnIndices = Enumerable.Repeat(true, value.Count).ToArray();
-                headers = value;
-            }
-        }
-    }
-
-    [Parameter]
-    public IReadOnlyList<List<string>> Content { get; set; } = new List<List<string>>();
-
-    [Parameter]
-    public EventCallback<bool[]> ActiveColumnsChanged { get; set; }
-
-    private bool[] activeColumnIndices = [];
-
-    private async Task CheckedChanged(bool isActive, int index)
-    {
-        activeColumnIndices[index] = isActive;
-        await ActiveColumnsChanged.InvokeAsync(activeColumnIndices);
-    }
-}
