@@ -93,8 +93,8 @@ public partial class DataViewer
             var jmesPath = new JmesPath();
             jmesPath.FunctionRepository.Register("unique", new UniqueFunction());
             queryResult = jToken is null
-                ? await FilterFromText(jmesPath).ConfigureAwait(false)
-                : await FilterFromToken(jmesPath, jToken).ConfigureAwait(false);
+                ? await FilterFromText(jmesPath)
+                : await FilterFromToken(jmesPath, jToken);
         }
         finally
         {
