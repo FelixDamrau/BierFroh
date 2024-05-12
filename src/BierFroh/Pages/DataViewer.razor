@@ -28,7 +28,7 @@
             <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="xmlFileInput">
                 Upload XML file
             </MudButton>
-            <MudButton OnClick="Parse" Variant="Variant.Filled">Parse</MudButton>
+            <MudButton OnClick="ParseXml" Variant="Variant.Filled">Parse</MudButton>
             <InputFile id="xmlFileInput" OnChange="UploadXml" hidden accept=".xml" />
         </MudExpansionPanel>
         <MudExpansionPanel Text="JSON data">
@@ -41,6 +41,14 @@
             <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="jsonFileInput">
                 Upload JSON file
             </MudButton>
+            <MudButton OnClick="PreParse" Variant="Variant.Filled" Disabled="preParsing">
+                @(preParsing ? "Parsing" : "Pre-Parse")
+            </MudButton>
+            <MudButton OnClick="CleanupPreParse" Variant="Variant.Filled">Cleanup Pre-parse</MudButton>
+            @if (!string.IsNullOrEmpty(jsonPreParseError))
+            {
+                <MudText>Error while pre-parsing: @jsonPreParseError</MudText>
+            }
             <InputFile id="jsonFileInput" OnChange="UploadJson" hidden accept=".json" />
         </MudExpansionPanel>
     </MudExpansionPanels>
