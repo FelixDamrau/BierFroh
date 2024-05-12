@@ -1,0 +1,105 @@
+﻿@page "/dataviewer"
+
+@using System.Xml
+@using DevLab.JmesPath
+@using Newtonsoft.Json
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">DataViewer</MudText>
+    <MudText>This page allows the filter JSON documents via JMESPath queries.</MudText>
+    <MudText>
+        You can upload JSON files directly or upload XML files which can be converted to JSON data.
+        See the JMESPath <MudLink Href="https://jmespath.org/specification.html" Target="_blank">specification</MudLink> or
+        <MudLink HRef="https://jmespath.org/examples.html" Target="_blank">examples</MudLink>.
+    </MudText>
+    <MudText>
+        There is one custom JMESPath function, <code>unique</code>, which takes an array as input.<br />
+        Example: <code>[*].name | unique(@@)</code>
+    </MudText>
+
+    <MudExpansionPanels MultiExpansion="true">
+        <MudExpansionPanel Text="XML data">
+            <MudTextField @bind-Value="xmlText"
+                          Clearable="true"
+                          HelperText="Enter or upload an XML file."
+                          Label="XML Text"
+                          Lines="6"
+                          Variant="Variant.Outlined" />
+            <MudButton for="xmlFileInput"
+                       Disabled="uploading"
+                       HtmlTag="label"
+                       StartIcon="@Icons.Material.Filled.FileUpload"
+                       Variant="Variant.Filled">
+                Upload XML file
+            </MudButton>
+            <InputFile id="xmlFileInput" OnChange="UploadXml" hidden accept=".xml" />
+            <MudButton OnClick="ParseXml" Variant="Variant.Filled">Parse</MudButton>
+            @if (!string.IsNullOrEmpty(xmlError))
+            {
+                <MudText>Error while parsing: @xmlError</MudText>
+            }
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="JSON data">
+            <MudTextField @bind-Value="jsonText"
+                          Clearable="true"
+                          HelperText="Parse a JSON document from the XML file above, or enter or upload an JSON file."
+                          Label="JSON Text"
+                          Lines="6"
+                          Variant="Variant.Outlined" />
+            <MudButton for="jsonFileInput"
+                       Disabled="uploading"
+                       HtmlTag="label"
+                       StartIcon="@Icons.Material.Filled.FileUpload"
+                       Variant="Variant.Filled">
+                Upload JSON file
+            </MudButton>
+            <InputFile id="jsonFileInput" OnChange="UploadJson" hidden accept=".json" />
+            <MudTooltip Text="The filter process needs the text to be pre-processed. You Can do this once here, or every time when filtering.">
+                <MudButton OnClick="PreParse" Variant="Variant.Filled" Disabled="preParsing">
+                    @(preParsing ? "Parsing" : "Pre-Parse")
+                </MudButton>
+            </MudTooltip>
+            <MudTooltip Text="Reset the pre-processed data. (Needed when the json text has changed)">
+                <MudButton OnClick="CleanupPreParse" Variant="Variant.Filled">Cleanup Pre-parse</MudButton>
+            </MudTooltip>
+            @if (!string.IsNullOrEmpty(jsonPreParseError))
+            {
+                <MudText>Error while pre-parsing: @jsonPreParseError</MudText>
+            }
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+
+    <MudGrid Justify="Justify.Center" Class="mt-2">
+        <MudItem xs="10" md="6">
+            <MudTextField @bind-Value="query" Label=" JMESPath expression" Clearable="true" OnKeyDown="KeyInQueryPressedAsync" Immediate="true" />
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton OnClick="FilterAsync" Variant="Variant.Filled" FullWidth="true" Disabled="@parsing">
+                @(parsing ? "Parsing" : "Filter")
+            </MudButton>
+        </MudItem>
+        <MudItem xs="10" md="6">
+            <MudTextField @bind-Value=queryResult
+                          Clearable="true"
+                          Label="Filter result"
+                          Lines="6"
+                          ReadOnly="true"
+                          Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton OnClick="Extract" Variant="Variant.Filled" FullWidth="true">Extract</MudButton>
+        </MudItem>
+        @if (!string.IsNullOrEmpty(cleanResults))
+        {
+            <MudItem xs="10" md="6">
+                <MudTextField @bind-Value=cleanResults
+                              Clearable="true"
+                              Label="Extracted data"
+                              Lines="20"
+                              ReadOnly="true"
+                              Variant="Variant.Outlined" />
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
