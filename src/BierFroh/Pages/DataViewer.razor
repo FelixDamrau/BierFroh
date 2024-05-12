@@ -25,11 +25,15 @@
                           Label="XML Text"
                           Lines="6"
                           Variant="Variant.Outlined" />
-            <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="xmlFileInput">
+            <MudButton for="xmlFileInput"
+                       Disabled="uploading"
+                       HtmlTag="label"
+                       StartIcon="@Icons.Material.Filled.FileUpload"
+                       Variant="Variant.Filled">
                 Upload XML file
             </MudButton>
-            <MudButton OnClick="ParseXml" Variant="Variant.Filled">Parse</MudButton>
             <InputFile id="xmlFileInput" OnChange="UploadXml" hidden accept=".xml" />
+            <MudButton OnClick="ParseXml" Variant="Variant.Filled">Parse</MudButton>
         </MudExpansionPanel>
         <MudExpansionPanel Text="JSON data">
             <MudTextField @bind-Value="jsonText"
@@ -38,18 +42,26 @@
                           Label="JSON Text"
                           Lines="6"
                           Variant="Variant.Outlined" />
-            <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="jsonFileInput">
+            <MudButton for="jsonFileInput"
+                       Disabled="uploading"
+                       HtmlTag="label"
+                       StartIcon="@Icons.Material.Filled.FileUpload"
+                       Variant="Variant.Filled">
                 Upload JSON file
             </MudButton>
-            <MudButton OnClick="PreParse" Variant="Variant.Filled" Disabled="preParsing">
-                @(preParsing ? "Parsing" : "Pre-Parse")
-            </MudButton>
-            <MudButton OnClick="CleanupPreParse" Variant="Variant.Filled">Cleanup Pre-parse</MudButton>
+            <InputFile id="jsonFileInput" OnChange="UploadJson" hidden accept=".json" />
+            <MudTooltip Text="The filter process needs the text to be pre-processed. You Can do this once here, or every time when filtering.">
+                <MudButton OnClick="PreParse" Variant="Variant.Filled" Disabled="preParsing">
+                    @(preParsing ? "Parsing" : "Pre-Parse")
+                </MudButton>
+            </MudTooltip>
+            <MudTooltip Text="Reset the pre-processed data. (Needed when the json text has changed)">
+                <MudButton OnClick="CleanupPreParse" Variant="Variant.Filled">Cleanup Pre-parse</MudButton>
+            </MudTooltip>
             @if (!string.IsNullOrEmpty(jsonPreParseError))
             {
                 <MudText>Error while pre-parsing: @jsonPreParseError</MudText>
             }
-            <InputFile id="jsonFileInput" OnChange="UploadJson" hidden accept=".json" />
         </MudExpansionPanel>
     </MudExpansionPanels>
 

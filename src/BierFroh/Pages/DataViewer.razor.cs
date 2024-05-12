@@ -24,6 +24,7 @@ public partial class DataViewer
 
     private bool parsing = false;
     private bool preParsing = false;
+    private bool uploading = false;
 
     private void ParseXml()
     {
@@ -156,12 +157,29 @@ public partial class DataViewer
 
     private async Task UploadXml(InputFileChangeEventArgs e)
     {
-        xmlText = await BrowserFileReader.ReadFile(e.File, maxFileSize);
+        try
+        {
+            uploading = true;
+            xmlText = await BrowserFileReader.ReadFile(e.File, maxFileSize);
+
+        }
+        finally
+        {
+            uploading = false;
+        }
     }
 
     private async Task UploadJson(InputFileChangeEventArgs e)
     {
-        xmlText = string.Empty;
-        jsonText = await BrowserFileReader.ReadFile(e.File, maxFileSize);
+        try
+        {
+            uploading = true;
+            xmlText = string.Empty;
+            jsonText = await BrowserFileReader.ReadFile(e.File, maxFileSize);
+        }
+        finally
+        {
+            uploading = false;
+        }
     }
 }
