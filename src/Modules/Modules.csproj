@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="AngleSharp" />
     <PackageReference Include="Develix.Essentials" />
+    <PackageReference Include="JmesPath.Net" />
     <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" />
   </ItemGroup>

@@ -1,0 +1,73 @@
+﻿@page "/dataviewer"
+
+@using System.Xml
+@using DevLab.JmesPath
+@using Newtonsoft.Json
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16">
+    <MudText Typo="Typo.h3" GutterBottom="true">DataViewer</MudText>
+    <MudText>This page allows the filter JSON documents via JMESPath queries.</MudText>
+    <MudText>
+        You can upload JSON files directly or upload XML files which can be converted to JSON data.
+        See the JMESPath <MudLink Href="https://jmespath.org/specification.html" Target="_blank">specification</MudLink> or
+        <MudLink HRef="https://jmespath.org/examples.html" Target="_blank">examples</MudLink>.
+    </MudText>
+    <MudText>
+        There is one custom JMESPath function, <code>unique</code>, which takes an array as input.<br />
+        Example: <code>[*].name | unique(@@)</code>
+    </MudText>
+
+    <MudExpansionPanels MultiExpansion="true">
+        <MudExpansionPanel Text="XML data">
+            <MudTextField @bind-Value="xmlText"
+                          Label="XML Text"
+                          HelperText="Enter or upload an XML file."
+                          Lines="6"
+                          Variant="Variant.Outlined" />
+            <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="xmlFileInput">
+                Upload XML file
+            </MudButton>
+            <MudButton OnClick="Parse" Variant="Variant.Filled">Parse</MudButton>
+            <InputFile id="xmlFileInput" OnChange="UploadXml" hidden accept=".xml" />
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="JSON data">
+            <MudTextField @bind-Value="jsonText"
+                          Label="JSON Text"
+                          HelperText="Parse a JSON document from the XML file above, or enter or upload an JSON file."
+                          Lines="6" />
+            <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="jsonFileInput">
+                Upload JSON file
+            </MudButton>
+            <InputFile id="jsonFileInput" OnChange="UploadJson" hidden accept=".json" />
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+
+    <MudGrid Justify="Justify.Center" Class="mt-2">
+        <MudItem xs="10" md="6">
+            <MudTextField @bind-Value="query" Label=" JMESPath expression" />
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton OnClick="Filter" Variant="Variant.Filled" FullWidth="true">Filter</MudButton>
+        </MudItem>
+        <MudItem xs="10" md="6">
+            <MudTextField @bind-Value=queryResult
+                          ReadOnly="true"
+                          Label="Filter result"
+                          Lines="6" />
+        </MudItem>
+        <MudItem xs="2">
+            <MudButton OnClick="Extract" Variant="Variant.Filled" FullWidth="true">Extract</MudButton>
+        </MudItem>
+        @if (!string.IsNullOrEmpty(cleanResults))
+        {
+            <MudItem xs="12">
+                <MudTextField @bind-Value=cleanResults
+                              ReadOnly="true"
+                              Label="Extracted data"
+                              Lines="20" />
+            </MudItem>
+        }
+    </MudGrid>
+
+</MudContainer>
+

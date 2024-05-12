@@ -9,9 +9,11 @@
   <ItemGroup>
     <PackageReference Include="Develix.Essentials" />
     <PackageReference Include="GraphShape" />
+    <PackageReference Include="JmesPath.Net" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" PrivateAssets="all" />
     <PackageReference Include="MudBlazor" />
+    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Z.Blazor.Diagrams" />
   </ItemGroup>
 
