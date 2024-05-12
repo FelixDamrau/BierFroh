@@ -3,6 +3,7 @@ using BierFroh.Model;
 using BierFroh.Modules.DataViewer;
 using DevLab.JmesPath;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 using Newtonsoft.Json;
 
 namespace BierFroh.Pages;
@@ -14,6 +15,8 @@ public partial class DataViewer
     private string? query;
     private string queryResult = string.Empty;
     private string cleanResults = string.Empty;
+
+    private bool parsing = false;
 
     private void Parse()
     {
@@ -36,13 +39,14 @@ public partial class DataViewer
             xmlDocument.RemoveChild(irrelevantNode);
     }
 
-    private void Filter()
+    private async Task FilterAsync()
     {
+        parsing = true;
         var jmesPath = new JmesPath();
         jmesPath.FunctionRepository.Register("unique", new UniqueFunction());
         try
         {
-            queryResult = jmesPath.Transform(jsonText, query);
+            await Task.Run(() => { queryResult = jmesPath.Transform(jsonText, query); });
         }
         catch (Exception ex)
         {
@@ -51,6 +55,16 @@ public partial class DataViewer
                 {ex.Message}
                 """;
         }
+        finally
+        {
+            parsing = false;
+        }
+    }
+
+    private async Task KeyInQueryPressedAsync(KeyboardEventArgs keyboardEventArgs)
+    {
+        if (keyboardEventArgs.Key == "Enter")
+            await FilterAsync();
     }
 
     private void Extract()

@@ -20,8 +20,9 @@
     <MudExpansionPanels MultiExpansion="true">
         <MudExpansionPanel Text="XML data">
             <MudTextField @bind-Value="xmlText"
-                          Label="XML Text"
+                          Clearable="true"
                           HelperText="Enter or upload an XML file."
+                          Label="XML Text"
                           Lines="6"
                           Variant="Variant.Outlined" />
             <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="xmlFileInput">
@@ -32,9 +33,11 @@
         </MudExpansionPanel>
         <MudExpansionPanel Text="JSON data">
             <MudTextField @bind-Value="jsonText"
-                          Label="JSON Text"
+                          Clearable="true"
                           HelperText="Parse a JSON document from the XML file above, or enter or upload an JSON file."
-                          Lines="6" />
+                          Label="JSON Text"
+                          Lines="6"
+                          Variant="Variant.Outlined" />
             <MudButton HtmlTag="label" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.FileUpload" for="jsonFileInput">
                 Upload JSON file
             </MudButton>
@@ -44,30 +47,33 @@
 
     <MudGrid Justify="Justify.Center" Class="mt-2">
         <MudItem xs="10" md="6">
-            <MudTextField @bind-Value="query" Label=" JMESPath expression" />
+            <MudTextField @bind-Value="query" Label=" JMESPath expression" Clearable="true" OnKeyDown="KeyInQueryPressedAsync" Immediate="true" />
         </MudItem>
         <MudItem xs="2">
-            <MudButton OnClick="Filter" Variant="Variant.Filled" FullWidth="true">Filter</MudButton>
+            <MudButton OnClick="FilterAsync" Variant="Variant.Filled" FullWidth="true" Disabled="@parsing">
+                @(parsing ? "Parsing" : "Filter")
+            </MudButton>
         </MudItem>
         <MudItem xs="10" md="6">
             <MudTextField @bind-Value=queryResult
-                          ReadOnly="true"
                           Label="Filter result"
-                          Lines="6" />
+                          Lines="6"
+                          ReadOnly="true"
+                          Variant="Variant.Outlined" />
         </MudItem>
         <MudItem xs="2">
             <MudButton OnClick="Extract" Variant="Variant.Filled" FullWidth="true">Extract</MudButton>
         </MudItem>
         @if (!string.IsNullOrEmpty(cleanResults))
         {
-            <MudItem xs="12">
+            <MudItem xs="10" md="6">
                 <MudTextField @bind-Value=cleanResults
-                              ReadOnly="true"
                               Label="Extracted data"
-                              Lines="20" />
+                              Lines="20"
+                              ReadOnly="true"
+                              Variant="Variant.Outlined" />
             </MudItem>
         }
     </MudGrid>
-
 </MudContainer>
 
