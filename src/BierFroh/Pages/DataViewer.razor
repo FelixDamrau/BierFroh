@@ -34,6 +34,10 @@
             </MudButton>
             <InputFile id="xmlFileInput" OnChange="UploadXml" hidden accept=".xml" />
             <MudButton OnClick="ParseXml" Variant="Variant.Filled">Parse</MudButton>
+            @if (!string.IsNullOrEmpty(xmlError))
+            {
+                <MudText>Error while parsing: @xmlError</MudText>
+            }
         </MudExpansionPanel>
         <MudExpansionPanel Text="JSON data">
             <MudTextField @bind-Value="jsonText"

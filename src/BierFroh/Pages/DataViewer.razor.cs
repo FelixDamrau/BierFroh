@@ -12,7 +12,7 @@ public partial class DataViewer
 {
     private const long maxFileSize = 209_715_200; // 200MB
     private string? xmlText;
-    private string? xmlErrorText;
+    private string? xmlError;
 
     private string jsonText = string.Empty;
     private JToken? jToken;
@@ -28,7 +28,7 @@ public partial class DataViewer
 
     private void ParseXml()
     {
-        xmlErrorText = null;
+        xmlError = null;
         if (string.IsNullOrEmpty(xmlText))
         {
             jsonText = string.Empty;
@@ -44,7 +44,7 @@ public partial class DataViewer
         catch (Exception ex)
         {
             jsonText = string.Empty;
-            xmlErrorText = $"""
+            xmlError = $"""
                 Could not convert XML document to json. See exception message for details:
                 {ex.Message}
                 """;
