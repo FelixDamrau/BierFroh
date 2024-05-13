@@ -11,6 +11,8 @@ See: [BierFroh github.io site](https://felixdamrau.github.io/BierFroh/)
 ヾ(￣▽￣) Bye~Bye
 
 ## Versions
+* 1.6.1
+  * Fix an issue with exception handling in data viewer
 * 1.6.0
   * Add data viewer page to view and filter xml and json data with JMESPath queries
 * 1.5.4

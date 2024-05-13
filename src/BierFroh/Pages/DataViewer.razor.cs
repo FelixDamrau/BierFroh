@@ -102,18 +102,19 @@ public partial class DataViewer
         }
     }
 
-    private Task<string> FilterFromText(JmesPath jmesPath)
+    private async Task<string> FilterFromText(JmesPath jmesPath)
     {
         try
         {
-            return Task.Run(() => jmesPath.Transform(jsonText, query));
+            // We wrap the transform task into a Task.Run, so the blazor ui does not get locked
+            return await Task.Run(() => jmesPath.Transform(jsonText, query));
         }
         catch (Exception ex)
         {
-            return Task.FromResult($"""
+            return $"""
                 Could not transform and filter query. See exception message for details:
                 {ex.Message}
-                """);
+                """;
         }
     }
 
@@ -121,8 +122,9 @@ public partial class DataViewer
     {
         try
         {
+            // We wrap the transform-async task into a Task.Run, so the blazor ui does not get locked
             var transformResult = await Task.Run(async () => await jmesPath.TransformAsync(jToken, query));
-            return transformResult.ToString()!;
+            return transformResult?.ToString() ?? string.Empty;
         }
         catch (Exception ex)
         {
